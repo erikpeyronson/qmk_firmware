@@ -7,5 +7,7 @@ enum Layers{
   Sym
 };
 
+#define MY_LT(layer, kc) LT(layer, kc)
+
 #include "keymap_out.h"
 
