@@ -8,7 +8,7 @@ qmk json2c -o $REPO_ROOT/keyboards/$KBD/keymaps/$KEYMAP/keymap_out.h $REPO_ROOT/
 qmk compile -kb $KBD/$VERSION -km $KEYMAP
 
 echo "Put first half in bootloader mode"
-qmk flash -kb $kbd/$version -km $keymap
-echo "Put second half in bootloader mode"
-qmk flash -kb $kbd/$version -km $keymap
+qmk flash -kb $KBD/$VERSION -km $KEYMAP
+# echo "Put second half in bootloader mode"
+# qmk flash -kb $KBD/$VERSION -km $KEYMAP
 
