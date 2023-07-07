@@ -48,7 +48,7 @@
       "ANY(MY_LT(Num,KC_DEL))",
       "ANY(MY_LT(Num,KC_ENT))",
       "ANY(MY_LT(Sym,KC_SPC))",
-      "KC_NO"
+      "ANY(MY_LT(Etc, KC_SPC))"
     ],
     [
       "KC_TRNS",

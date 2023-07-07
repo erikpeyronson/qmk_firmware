@@ -5,7 +5,8 @@ enum Layers{
   Swe,
   Num,
   Sym,
-  Nav
+  Nav,
+  Etc
 };
 
 enum TapDanceActions {
