@@ -4,7 +4,8 @@ enum Layers{
   Base = 0,
   Swe,
   Num,
-  Sym
+  Sym,
+  Nav
 };
 
 enum TapDanceActions {
