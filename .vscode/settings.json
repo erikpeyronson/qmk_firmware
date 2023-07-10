@@ -28,7 +28,12 @@
     "[json]": {
         "editor.formatOnSave": false
     },
+
+    "C_Cpp.intelliSenseEngine": "disabled",
     "clangd.arguments": [
-        "--header-insertion=never"
-    ]
+      "--header-insertion=never",
+      "--compile-commands-dir=${workspaceFolder}"
+      // "-query-driver=/usr/bin/avr-g++"
+    ],
+    "clangd.path": "/home/erik/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/16.0.2/clangd_16.0.2/bin/clangd",
 }
