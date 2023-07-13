@@ -1,5 +1,6 @@
 #include "quantum.h"
 #include "logo.h"
+#include "oled_driver.h"
 
 void my_oled_render_logo(void) {
     oled_write_raw_P(raw_logo, sizeof(raw_logo));
