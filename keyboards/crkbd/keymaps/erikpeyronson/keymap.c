@@ -16,40 +16,103 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_Q_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_Q, Base),
 };
 
-// void keyboard_post_init_user(void) {
-//     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-//     rgb_matrix_sethsv_noeeprom(HSV_OFF);
-// }
-
-// #ifdef RGB_MATRIX_ENABLE
-
-
-// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-//     for (uint8_t i = led_min; i < led_max; i++) {
-//         switch(get_highest_layer(layer_state|default_layer_state)) {
-//             case Base:
-//                 rgb_matrix_set_color(i, RGB_WHITE);
-//                 break;
-//             case Swe:
-//                 rgb_matrix_set_color(i, RGB_YELLOW);
-//                 break;
-//             case Num:
-//                 rgb_matrix_set_color(i, RGB_RED);
-//                 break;
-//             case Sym:
-//                 rgb_matrix_set_color(i, RGB_GOLD);
-//                 break;
-//             case Etc:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-
-//             default:
-//                 break;
-//         }
-//     }
-//     return false;
-// }
-
-// #endif
+void keyboard_post_init_user(void) {
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(HSV_OFF);
+}
 
 #include "keymap_out.h"
+
+#ifdef RGB_MATRIX_ENABLE
+
+const int led_count = 46 + 7;
+
+int leds[] = {6, 6, 17, 18, 29, 30, 36, 37, 38, 41, 44, 45, 46};
+
+// clang-format off
+uint8_t led_mappings[4][6] = {
+  {24, 23, 18, 17, 10, 9 },
+  {25, 22, 19, 16, 11, 8 },
+  {26, 21, 20, 15, 12, 7 },
+  {0,  0,  0,  14, 1,  3 },
+};
+// clang-format on
+
+struct ColorBinding {
+  uint16_t red;
+  uint16_t green;
+  uint16_t blue;
+  };
+
+struct ColorBinding layer_color_mappings[] = {
+  {RGB_OFF},
+  {RGB_YELLOW},
+  {RGB_BLUE},
+  {RGB_GREEN},
+  {RGB_PINK},
+};
+
+bool rgb_matrix_indicators_user() {
+            uint16_t layer = get_highest_layer(layer_state | default_layer_state);
+            for (int row = 0; row < 4; ++row) {
+                for (int col = 0; col < 6; ++col) {
+                    uint16_t kc = keymaps[layer][row][col];
+                    if (kc != KC_NO) {
+                        struct ColorBinding* rgb = &layer_color_mappings[layer];
+                        rgb_matrix_set_color(led_mappings[row][col], rgb->red, rgb->green, rgb->blue);
+                    }
+                }
+            }
+            return false;
+
+    // switch (get_highest_layer(layer_state | default_layer_state)) {
+    //     case Swe:
+    //         for (int row = 0; row < 4; ++row) {
+    //             for (int col = 0; col < 6; ++col) {
+    //                 uint16_t kc = keymaps[Swe][row][col];
+    //                 if (kc != KC_NO) {
+    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_YELLOW);
+    //                 }
+    //             }
+    //         }
+    //         break;
+    //     case Num:
+    //         for (int row = 0; row < 4; ++row) {
+    //             for (int col = 0; col < 6; ++col) {
+    //                 uint16_t kc = keymaps[Num][row][col];
+    //                 if (kc != KC_NO) {
+    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_BLUE);
+    //                 }
+    //             }
+    //         }
+    //         break;
+    //     case Sym:
+    //         for (int row = 0; row < 4; ++row) {
+    //             for (int col = 0; col < 6; ++col) {
+    //                 uint16_t kc = keymaps[Sym][row][col];
+    //                 if (kc != KC_NO) {
+    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_RED);
+    //                 }
+    //             }
+    //         }
+
+    //         break;
+    //     case Nav:
+    //         for (int row = 0; row < 4; ++row) {
+    //             for (int col = 0; col < 6; ++col) {
+    //                 uint16_t kc = keymaps[Nav][row][col];
+    //                 if (kc != KC_NO) {
+    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_RED);
+    //                 }
+    //             }
+    //         }
+    //         // rgb_matrix_set_color(i, RGB_BLUE);
+    //         break;
+
+    //     default:
+    //         break;
+    // }
+    // return false;
+}
+
+#endif
