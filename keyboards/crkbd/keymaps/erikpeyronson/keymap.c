@@ -50,69 +50,28 @@ struct ColorBinding layer_color_mappings[] = {
 };
 
 bool rgb_matrix_indicators_user() {
+    // for(int i = 0; i < 54; ++i) {
+    //   rgb_matrix_set_color(i, RGB_WHITE);
+    // }
     uint16_t layer = get_highest_layer(layer_state | default_layer_state);
     for (int row = 0; row < 4; ++row) {
         for (int col = 0; col < 6; ++col) {
             keypos_t current_key; // {.col = col, .row = row};
             current_key.col = col;
             current_key.row = row;
-            uint16_t kc = keymap_key_to_keycode(layer, current_key);
+            uint16_t kc     = keymap_key_to_keycode(layer, current_key);
+
             if (kc != KC_NO && kc != KC_TRANSPARENT) {
+                uint8_t led_index = led_mappings[row][col];
+                if (!is_keyboard_master()) {
+                  led_index += 27;
+                }
                 struct ColorBinding* rgb = &layer_color_mappings[layer];
-                rgb_matrix_set_color(led_mappings[row][col], rgb->red, rgb->green, rgb->blue);
+                rgb_matrix_set_color(led_index, rgb->red, rgb->green, rgb->blue);
             }
         }
     }
     return false;
-
-    // switch (get_highest_layer(layer_state | default_layer_state)) {
-    //     case Swe:
-    //         for (int row = 0; row < 4; ++row) {
-    //             for (int col = 0; col < 6; ++col) {
-    //                 uint16_t kc = keymaps[Swe][row][col];
-    //                 if (kc != KC_NO) {
-    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_YELLOW);
-    //                 }
-    //             }
-    //         }
-    //         break;
-    //     case Num:
-    //         for (int row = 0; row < 4; ++row) {
-    //             for (int col = 0; col < 6; ++col) {
-    //                 uint16_t kc = keymaps[Num][row][col];
-    //                 if (kc != KC_NO) {
-    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_BLUE);
-    //                 }
-    //             }
-    //         }
-    //         break;
-    //     case Sym:
-    //         for (int row = 0; row < 4; ++row) {
-    //             for (int col = 0; col < 6; ++col) {
-    //                 uint16_t kc = keymaps[Sym][row][col];
-    //                 if (kc != KC_NO) {
-    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_RED);
-    //                 }
-    //             }
-    //         }
-
-    //         break;
-    //     case Nav:
-    //         for (int row = 0; row < 4; ++row) {
-    //             for (int col = 0; col < 6; ++col) {
-    //                 uint16_t kc = keymaps[Nav][row][col];
-    //                 if (kc != KC_NO) {
-    //                     rgb_matrix_set_color(led_mappings[row][col], RGB_RED);
-    //                 }
-    //             }
-    //         }
-    //         // rgb_matrix_set_color(i, RGB_BLUE);
-    //         break;
-
-    //     default:
-    //         break;
-    // }
-    // return false;
 }
 
 #endif
