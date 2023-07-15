@@ -2,6 +2,7 @@
 
 #include "oled_driver.h"
 #include "quantum.h"
+#include "keyboard.h"
 
 enum Layers { Base = 0, Swe, Num, Sym, Nav, Etc };
 
@@ -34,36 +35,35 @@ uint8_t led_mappings[4][6] = {
   {24, 23, 18, 17, 10, 9 },
   {25, 22, 19, 16, 11, 8 },
   {26, 21, 20, 15, 12, 7 },
-  {0,  0,  0,  14, 1,  3 },
+  {0,  0,  0,  14, 13,  6},
 };
 // clang-format on
 
 struct ColorBinding {
-  uint16_t red;
-  uint16_t green;
-  uint16_t blue;
-  };
+    uint16_t red;
+    uint16_t green;
+    uint16_t blue;
+};
 
 struct ColorBinding layer_color_mappings[] = {
-  {RGB_OFF},
-  {RGB_YELLOW},
-  {RGB_BLUE},
-  {RGB_GREEN},
-  {RGB_PINK},
+    {RGB_OFF}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_PINK},
 };
 
 bool rgb_matrix_indicators_user() {
-            uint16_t layer = get_highest_layer(layer_state | default_layer_state);
-            for (int row = 0; row < 4; ++row) {
-                for (int col = 0; col < 6; ++col) {
-                    uint16_t kc = keymaps[layer][row][col];
-                    if (kc != KC_NO) {
-                        struct ColorBinding* rgb = &layer_color_mappings[layer];
-                        rgb_matrix_set_color(led_mappings[row][col], rgb->red, rgb->green, rgb->blue);
-                    }
-                }
+    uint16_t layer = get_highest_layer(layer_state | default_layer_state);
+    for (int row = 0; row < 4; ++row) {
+        for (int col = 0; col < 6; ++col) {
+            keypos_t current_key; // {.col = col, .row = row};
+            current_key.col = col;
+            current_key.row = row;
+            uint16_t kc = keymap_key_to_keycode(layer, current_key);
+            if (kc != KC_NO && kc != KC_TRANSPARENT) {
+                struct ColorBinding* rgb = &layer_color_mappings[layer];
+                rgb_matrix_set_color(led_mappings[row][col], rgb->red, rgb->green, rgb->blue);
             }
-            return false;
+        }
+    }
+    return false;
 
     // switch (get_highest_layer(layer_state | default_layer_state)) {
     //     case Swe:
