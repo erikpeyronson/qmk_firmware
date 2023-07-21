@@ -6,15 +6,15 @@
 
 enum Layers { Base = 0, Swe, Num, Sym, Nav, Etc };
 
-enum TapDanceActions { TD_Q_SWE = 0, TD_Q_BASE };
+enum TapDanceActions { TD_SWE = 0, TD_BASE };
 
 #define MY_LT(layer, kc) LT(layer, kc)
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for W, twice for switch to swedish layer
-    [TD_Q_SWE]  = ACTION_TAP_DANCE_LAYER_MOVE(KC_Q, Swe),
-    [TD_Q_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_Q, Base),
+    [TD_SWE]  = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, Swe),
+    [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, Base),
 };
 
 void keyboard_post_init_user(void) {
@@ -60,7 +60,7 @@ struct ColorBinding {
 };
 
 struct ColorBinding layer_color_mappings[] = {
-    {RGB_WHITE}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_PINK},
+    {RGB_WHITE}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_RED},
 };
 
 bool rgb_matrix_indicators_user() {
