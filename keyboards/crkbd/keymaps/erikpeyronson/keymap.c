@@ -22,10 +22,10 @@ void keyboard_post_init_user(void) {
     rgb_matrix_sethsv_noeeprom(HSV_OFF);
 
     // Customise these values to desired behaviour
-    // debug_enable=true;
-    // debug_matrix=true;
-    // debug_keyboard=true;
-    // debug_mouse=true;
+    debug_enable=false;
+    debug_matrix=false;
+    debug_keyboard=false;
+    debug_mouse=false;
 }
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     // If console is enabled, it will print the matrix position and status of each key pressed
@@ -60,7 +60,7 @@ struct ColorBinding {
 };
 
 struct ColorBinding layer_color_mappings[] = {
-    {RGB_OFF}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_PINK},
+    {RGB_WHITE}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_PINK},
 };
 
 bool rgb_matrix_indicators_user() {
@@ -69,18 +69,24 @@ bool rgb_matrix_indicators_user() {
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 6; ++col) {
             keypos_t current_key = {.col = col, .row = row};
-            // current_key.col = col;
-            // current_key.row = row + slave_row_offset;
-            uint16_t kc     = keymap_key_to_keycode(layer, current_key);
+            uint8_t current_layer = layer;
+            uint16_t kc     = keymap_key_to_keycode(current_layer, current_key);
+
+            while (kc == KC_TRANSPARENT) {
+              current_layer--;
+              kc     = keymap_key_to_keycode(current_layer, current_key);
+            }
 
             if (kc != KC_NO && kc != KC_TRANSPARENT) {
                 uint8_t led_index;
+                // since the led inices are mirrored on the slave side
+                // with an offset of 27 only one side needs to be stored
                 if (!is_keyboard_master()) {
                   led_index = led_mappings[row - 4][col] + 27;
                 } else {
                   led_index = led_mappings[row][col];
                 }
-                struct ColorBinding* rgb = &layer_color_mappings[layer];
+                struct ColorBinding* rgb = &layer_color_mappings[current_layer];
                 rgb_matrix_set_color(led_index, rgb->red, rgb->green, rgb->blue);
             }
         }
