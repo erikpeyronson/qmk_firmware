@@ -22,10 +22,10 @@ void keyboard_post_init_user(void) {
     rgb_matrix_sethsv_noeeprom(HSV_OFF);
 
     // Customise these values to desired behaviour
-    debug_enable=false;
-    debug_matrix=false;
-    debug_keyboard=false;
-    debug_mouse=false;
+    debug_enable   = false;
+    debug_matrix   = false;
+    debug_keyboard = false;
+    debug_mouse    = false;
 }
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     // If console is enabled, it will print the matrix position and status of each key pressed
@@ -41,17 +41,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
 const int led_count = 46 + 7;
 
-int leds[] = {6, 6, 17, 18, 29, 30, 36, 37, 38, 41, 44, 45, 46};
-
-// clang-format off
-uint8_t led_mappings[8][6] = {
-  // left side (master)
-  {24, 23, 18, 17, 10, 9 },
-  {25, 22, 19, 16, 11, 8 },
-  {26, 21, 20, 15, 12, 7 },
-  {0,  0,  0,  14, 13,  6},
-};
-// clang-format on
+// int leds[] = {6, 6, 17, 18, 29, 30, 36, 37, 38, 41, 44, 45, 46};
 
 struct ColorBinding {
     uint16_t red;
@@ -59,34 +49,29 @@ struct ColorBinding {
     uint16_t blue;
 };
 
-struct ColorBinding layer_color_mappings[] = {
-    {RGB_WHITE}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_RED},
-};
+struct ColorBinding layer_color_mappings[] = {{RGB_WHITE}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_PINK}, {RGB_RED}};
 
 bool rgb_matrix_indicators_user() {
-    uint16_t layer            = get_highest_layer(layer_state | default_layer_state);
+    uint16_t layer = get_highest_layer(layer_state | default_layer_state);
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 6; ++col) {
-            keypos_t current_key = {.col = col, .row = row};
-            uint8_t current_layer = layer;
-            uint16_t kc     = keymap_key_to_keycode(current_layer, current_key);
+            keypos_t current_key   = {.col = col, .row = row};
+            uint8_t  current_layer = layer;
+            uint16_t kc            = keymap_key_to_keycode(current_layer, current_key);
 
-            while (kc == KC_TRANSPARENT) {
-              current_layer--;
-              kc     = keymap_key_to_keycode(current_layer, current_key);
+            while (true) {
+                kc = keymap_key_to_keycode(current_layer, current_key);
+                if (current_layer > 0 && (kc == KC_TRANSPARENT || IS_LAYER_OFF(current_layer))) {
+                    current_layer--;
+                } else {
+                    break;
+                }
             }
 
             if (kc != KC_NO && kc != KC_TRANSPARENT) {
-                uint8_t led_index;
-                // since the led inices are mirrored on the slave side
-                // with an offset of 27 only one side needs to be stored
-                if (!is_keyboard_master()) {
-                  led_index = led_mappings[row - 4][col] + 27;
-                } else {
-                  led_index = led_mappings[row][col];
-                }
-                struct ColorBinding* rgb = &layer_color_mappings[current_layer];
+                uint8_t              led_index = g_led_config.matrix_co[row][col];
+                struct ColorBinding* rgb       = &layer_color_mappings[current_layer];
                 rgb_matrix_set_color(led_index, rgb->red, rgb->green, rgb->blue);
             }
         }
