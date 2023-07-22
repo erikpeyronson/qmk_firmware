@@ -5,4 +5,4 @@ CAPS_WORD_ENABLE = yes
 SPLIT_LAYER_STATE_ENABLE = yes
 CONSOLE_ENABLE = yes
 
-SRC +=  oled.c
+SRC +=  oled.c rgb.c
