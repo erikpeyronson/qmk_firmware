@@ -5,10 +5,7 @@
 #include "quantum.h"
 #include "rgb.h"
 #include "logo.h"
-
-enum Layers { Base = 0, Swe, Num, Sym, Nav, Etc };
-
-enum TapDanceActions { TD_SWE = 0, TD_BASE };
+#include "common.h"
 
 #define MY_LT(layer, kc) LT(layer, kc)
 

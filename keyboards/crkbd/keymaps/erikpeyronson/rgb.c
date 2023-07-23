@@ -1,8 +1,10 @@
 #ifdef RGB_MATRIX_ENABLE
 
+// clang-format off
 #include "rgb.h"
-
 #include "rgb_matrix.h"
+#include "common.h"
+// clang-format on
 
 struct ColorBinding {
     uint16_t red;
@@ -10,49 +12,68 @@ struct ColorBinding {
     uint16_t blue;
 };
 
-struct ColorBinding layer_color_mappings[] = {{RGB_WHITE}, {RGB_YELLOW}, {RGB_BLUE}, {RGB_GREEN}, {RGB_PINK}, {RGB_RED}};
-
-
 void my_rgb_init(void) {
+    // Turn all leds off during startup
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
     rgb_matrix_sethsv_noeeprom(HSV_OFF);
 }
 
+struct ColorBinding get_color(uint16_t layer) {
+    switch (layer) {
+        case Base:
+            return (struct ColorBinding){RGB_WHITE};
+        case Swe:
+            return (struct ColorBinding){RGB_YELLOW};
+        case Num:
+            return (struct ColorBinding){RGB_BLUE};
+        case Sym:
+            return (struct ColorBinding){RGB_GREEN};
+        case Nav:
+            return (struct ColorBinding){RGB_ORANGE};
+        case Etc:
+            return (struct ColorBinding){RGB_RED};
+        default:
+            return (struct ColorBinding){RGB_OFF};
+    }
+}
 
-bool rgb_matrix_indicators_user() {
-    uint16_t layer = get_highest_layer(layer_state | default_layer_state);
+int8_t get_layer_with_binding(uint8_t layer, const keypos_t keypos) {
+    uint16_t kc = keymap_key_to_keycode(layer, keypos);
 
-    uint8_t low, high;
-
-    if (is_keyboard_master()) {
-      low = 0;
-      high = 4;
-    } else
-    {
-      low = 4 ;
-      high = 8;
+    while (layer > 0 && (kc == KC_TRANSPARENT || IS_LAYER_OFF(layer))) {
+        layer--;
+        kc = keymap_key_to_keycode(layer, keypos);
     }
 
-      for (int row = low; row < high; ++row) {
+    if (kc != KC_NO && kc != KC_TRANSPARENT) {
+        return layer;
+    }
+
+    return -1;
+}
+
+bool rgb_matrix_indicators_user() {
+    uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
+    uint8_t  first_row, last_row;
+
+    // To save some clock cycles let each half light its own leds rather than
+    // both sides lighting all
+    if (is_keyboard_master()) {
+        first_row = 0;
+        last_row  = 4;
+    } else {
+        first_row = 4;
+        last_row  = 8;
+    }
+
+    for (int row = first_row; row < last_row; ++row) {
         for (int col = 0; col < 6; ++col) {
-            keypos_t current_key   = {.col = col, .row = row};
-            uint8_t  current_layer = layer;
-            uint16_t kc            = keymap_key_to_keycode(current_layer, current_key);
+            keypos_t            current_key = {.col = col, .row = row};
+            uint8_t             led_index   = g_led_config.matrix_co[row][col];
+            uint8_t             layer       = get_layer_with_binding(current_layer, current_key);
+            struct ColorBinding rgb         = get_color(layer);
 
-            while (true) {
-                kc = keymap_key_to_keycode(current_layer, current_key);
-                if (current_layer > 0 && (kc == KC_TRANSPARENT || IS_LAYER_OFF(current_layer))) {
-                    current_layer--;
-                } else {
-                    break;
-                }
-            }
-
-            if (kc != KC_NO && kc != KC_TRANSPARENT) {
-                uint8_t              led_index = g_led_config.matrix_co[row][col];
-                struct ColorBinding* rgb       = &layer_color_mappings[current_layer];
-                rgb_matrix_set_color(led_index, rgb->red, rgb->green, rgb->blue);
-            }
+            rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
         }
     }
     return false;
