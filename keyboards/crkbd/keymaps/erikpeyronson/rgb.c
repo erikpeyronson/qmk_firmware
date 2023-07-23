@@ -22,7 +22,18 @@ void my_rgb_init(void) {
 bool rgb_matrix_indicators_user() {
     uint16_t layer = get_highest_layer(layer_state | default_layer_state);
 
-    for (int row = 0; row < 8; ++row) {
+    uint8_t low, high;
+
+    if (is_keyboard_master()) {
+      low = 0;
+      high = 4;
+    } else
+    {
+      low = 4 ;
+      high = 8;
+    }
+
+      for (int row = low; row < high; ++row) {
         for (int col = 0; col < 6; ++col) {
             keypos_t current_key   = {.col = col, .row = row};
             uint8_t  current_layer = layer;
