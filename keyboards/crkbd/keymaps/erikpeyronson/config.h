@@ -95,7 +95,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    undef ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
 #endif
 
-#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 
 #define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR
 #define RGB_MATRIX_STARTUP_HUE 0
@@ -112,3 +111,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USB_MAX_POWER_CONSUMPTION 500
 #undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 20
+
+#define SPLIT_TRANSACTION_IDS_USER SYNC_RGB_MODE
+
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD

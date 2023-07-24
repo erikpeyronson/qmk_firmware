@@ -1,7 +1,11 @@
 RGBLIGHT_ENABLE = no
-RGB_MATRIX_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 CAPS_WORD_ENABLE = yes
 CONSOLE_ENABLE = no
 
-SRC +=  oled.c rgb.c
+
+RGB_MATRIX_ENABLE = yes
+ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
+	SRC +=  rgb.c
+endif
+SRC += oled.c

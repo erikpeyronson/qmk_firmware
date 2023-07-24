@@ -4,6 +4,7 @@
 #include "rgb.h"
 #include "rgb_matrix.h"
 #include "common.h"
+#include "transactions.h"
 // clang-format on
 
 enum RgbMode current_mode = EACH_KEY;
@@ -13,6 +14,10 @@ struct ColorBinding {
     uint16_t green;
     uint16_t blue;
 };
+
+typedef struct _master_to_slave_t {
+    int rgb_mode;
+} master_to_slave_t;
 
 void my_rgb_init(void) {
     // Turn all leds off during startup
@@ -142,6 +147,13 @@ void my_next_rgb_mode(void) {
     if (current_mode++ >= OFF) {
         current_mode = 0;
     }
+    master_to_slave_t m2s = {current_mode};
+    transaction_rpc_exec(SYNC_RGB_MODE, sizeof(m2s), &m2s, 0, NULL);
+}
+
+void sync_rgb_mode(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
+    const master_to_slave_t* m2s = (const master_to_slave_t*)in_data;
+    current_mode                 = m2s->rgb_mode;
 }
 
 #endif

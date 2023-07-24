@@ -6,6 +6,8 @@
 #include "rgb.h"
 #include "logo.h"
 #include "common.h"
+#include "transactions.h"
+
 
 #define MY_LT(layer, kc) LT(layer, kc)
 
@@ -26,6 +28,8 @@ void keyboard_post_init_user(void) {
     debug_matrix   = false;
     debug_keyboard = false;
     debug_mouse    = false;
+
+    transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
