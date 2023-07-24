@@ -37,7 +37,7 @@ struct ColorBinding get_color(uint16_t layer) {
     }
 }
 
-int8_t get_layer_with_binding(uint8_t layer, const keypos_t keypos) {
+int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos) {
     uint16_t kc = keymap_key_to_keycode(layer, keypos);
 
     while (layer > 0 && (kc == KC_TRANSPARENT || IS_LAYER_OFF(layer))) {
@@ -52,7 +52,7 @@ int8_t get_layer_with_binding(uint8_t layer, const keypos_t keypos) {
     return -1;
 }
 
-bool rgb_matrix_indicators_user() {
+void each_key(void) {
     uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
     uint8_t  first_row, last_row;
 
@@ -70,12 +70,40 @@ bool rgb_matrix_indicators_user() {
         for (int col = 0; col < 6; ++col) {
             keypos_t            current_key = {.col = col, .row = row};
             uint8_t             led_index   = g_led_config.matrix_co[row][col];
-            uint8_t             layer       = get_layer_with_binding(current_layer, current_key);
+            uint8_t             layer       = get_layer_with_key(current_layer, current_key);
             struct ColorBinding rgb         = get_color(layer);
 
             rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
         }
     }
+}
+
+void thumbs_only(void) {
+    // let each half light their own
+    uint8_t row;
+    if (is_keyboard_master()) {
+        row = 3;
+    } else {
+        row = 7;
+    }
+
+    // thumb key indexes
+    uint8_t first_column = 3;
+    uint8_t last_column  = 5;
+
+    for (uint8_t col = first_column; col < last_column + 1; ++col) {
+        keypos_t            current_key = {.col = col, .row = row};
+        uint16_t            kc          = keymap_key_to_keycode(0, current_key);
+        uint8_t             layer       = QK_LAYER_TAP_GET_LAYER(kc);
+        uint8_t             led_index   = g_led_config.matrix_co[row][col];
+        struct ColorBinding rgb         = get_color(layer);
+        rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
+    }
+}
+
+bool rgb_matrix_indicators_user() {
+    // each_key();
+    thumbs_only();
     return false;
 }
 

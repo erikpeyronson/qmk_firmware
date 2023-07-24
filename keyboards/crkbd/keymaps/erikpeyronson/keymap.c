@@ -27,6 +27,7 @@ void keyboard_post_init_user(void) {
     debug_keyboard = false;
     debug_mouse    = false;
 }
+
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
