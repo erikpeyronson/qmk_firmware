@@ -6,6 +6,8 @@
 #include "common.h"
 // clang-format on
 
+enum RgbMode current_mode = EACH_KEY;
+
 struct ColorBinding {
     uint16_t red;
     uint16_t green;
@@ -79,6 +81,8 @@ void each_key(void) {
 }
 
 void thumbs_only(void) {
+    uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
+
     // let each half light their own
     uint8_t row;
     if (is_keyboard_master()) {
@@ -93,18 +97,51 @@ void thumbs_only(void) {
 
     for (uint8_t col = first_column; col < last_column + 1; ++col) {
         keypos_t            current_key = {.col = col, .row = row};
-        uint16_t            kc          = keymap_key_to_keycode(0, current_key);
-        uint8_t             layer       = QK_LAYER_TAP_GET_LAYER(kc);
-        uint8_t             led_index   = g_led_config.matrix_co[row][col];
-        struct ColorBinding rgb         = get_color(layer);
+        struct ColorBinding rgb;
+
+        uint8_t led_index = g_led_config.matrix_co[row][col];
+
+        // If we are on the base layer use the target layer, otherwise just
+        // display which layer we are at
+        if (current_layer == Base) {
+            uint16_t kc           = keymap_key_to_keycode(0, current_key);
+            uint8_t  target_layer = QK_LAYER_TAP_GET_LAYER(kc);
+            rgb                   = get_color(target_layer);
+        } else if (current_layer == Swe && is_keyboard_left()) {
+            rgb = (struct ColorBinding){RGB_BLUE};
+
+        } else {
+            rgb = get_color(current_layer);
+        }
+
         rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
     }
 }
 
 bool rgb_matrix_indicators_user() {
-    // each_key();
-    thumbs_only();
+    // enum RgbMode mode = THUMBS_ONLY;
+
+    switch (current_mode) {
+        case EACH_KEY:
+            each_key();
+            break;
+        case THUMBS_ONLY:
+            thumbs_only();
+            break;
+        default:
+            break;
+    }
     return false;
+}
+
+void set_rgb_mode(enum RgbMode mode) {
+    current_mode = mode;
+}
+
+void my_next_rgb_mode(void) {
+    if (current_mode++ >= OFF) {
+        current_mode = 0;
+    }
 }
 
 #endif
