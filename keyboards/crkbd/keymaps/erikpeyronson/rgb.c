@@ -7,7 +7,7 @@
 #include "transactions.h"
 // clang-format on
 
-enum RgbMode current_mode = EACH_KEY;
+RgbMode current_mode = EACH_KEY;
 
 struct ColorBinding {
     uint16_t red;
@@ -139,7 +139,7 @@ bool rgb_matrix_indicators_user() {
     return false;
 }
 
-void set_rgb_mode(enum RgbMode mode) {
+void set_rgb_mode(RgbMode mode) {
     current_mode = mode;
 }
 

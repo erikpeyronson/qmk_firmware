@@ -101,9 +101,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGB_MATRIX_STARTUP_SAT 0
 #define RGB_MATRIX_STARTUP_VAL 0
 
-// NOTE not sure if these are needed for oled
-// #define SPLIT_TRANSPORT_MIRROR
-// #define SPLIT_LED_STATE_ENABLE
 #define SPLIT_LAYER_STATE_ENABLE
 
 #define RGB_MATRIX_SPLIT { 27, 27 }
@@ -114,4 +111,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define SPLIT_TRANSACTION_IDS_USER SYNC_RGB_MODE
 
-#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+// #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
