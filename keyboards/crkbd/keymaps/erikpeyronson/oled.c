@@ -4,46 +4,47 @@
 #include "common.h"
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return OLED_ROTATION_270;
+    if (is_keyboard_master()) {
+      rotation = OLED_ROTATION_270;
+    }
+    return rotation;
 }
 
 static void oled_render_layer_state(void) {
-    uint8_t layer = get_highest_layer(layer_state);
+    oled_clear();
+    uint8_t current_layer = get_highest_layer(layer_state);
 
-    switch (layer) {
-        case Base:
-            oled_write_ln_P(PSTR("Base"), false);
-            break;
-        case Swe:
-            oled_write_ln_P(PSTR("Swe"), false);
-            break;
-        case Num:
-            oled_write_ln_P(PSTR("Num"), false);
-            break;
-        case Sym:
-            oled_write_ln_P(PSTR("Sym"), false);
-            break;
-        case Nav:
-            oled_write_ln_P(PSTR("Nav"), false);
-            break;
-        case Etc:
-            oled_write_ln_P(PSTR("Etc"), false);
-            break;
+    char* const layers[] = {
+        "Bas", "Swe", "Num", "Sym", "Nav", "Etc",
+    };
+
+    oled_write_P(PSTR("LAYER"), false);
+    oled_write_P(PSTR("-----"), false);
+
+    for (enum Layers layer = Base; layer < Etc; ++layer) {
+        if (current_layer == layer) {
+            oled_write_char('#', false);
+        } else {
+            // const char layer_number = (char)layer + '0';
+            // oled_write(&layer_number, false);
+            oled_write_char(' ', false);
+        }
+
+        oled_write_char(' ', false);
+        oled_write(layers[layer], false);
     }
+
+    oled_write_P(PSTR("-----"), false);
 
     led_t led_config = host_keyboard_led_state();
-
-    oled_write_ln_P(PSTR(""), false);
-
     if (led_config.caps_lock) {
-        oled_write_ln_P(PSTR("CAPS"), false);
+        oled_write_P(PSTR("CAPS "), false);
     } else if (is_caps_word_on()) {
-        oled_write_ln_P(PSTR("WORD"), false);
+        oled_write_P(PSTR("WORD "), false);
     } else {
-        oled_write_ln_P(PSTR(""), false);
+        oled_advance_page(true);
     }
-
-  // oled_scroll_right();
+    oled_write_ln_P(PSTR("-----"), false);
 }
 
 void my_oled_render_logo(void) {
@@ -51,10 +52,10 @@ void my_oled_render_logo(void) {
 }
 
 bool oled_task_user(void) {
-    // if (is_keyboard_master()) {
-    oled_render_layer_state();
-    // } else {
-    //     my_oled_render_logo();
-    // }
+    if (is_keyboard_master()) {
+      oled_render_layer_state();
+    } else {
+        my_oled_render_logo();
+    }
     return false;
 }
