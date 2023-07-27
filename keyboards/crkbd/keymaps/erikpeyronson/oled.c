@@ -14,7 +14,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 void oled_render_selection(const char* str, bool is_active) {
     if (is_active) {
-        oled_write_char('#', false);
+        oled_write_char('*', false);
     } else {
         oled_write_char(' ', false);
     }
