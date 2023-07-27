@@ -3,48 +3,62 @@
 #include "oled_driver.h"
 #include "common.h"
 
+#include "print.h"
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
-      rotation = OLED_ROTATION_270;
+        rotation = OLED_ROTATION_270;
     }
     return rotation;
 }
 
-static void oled_render_layer_state(void) {
-    oled_clear();
+void oled_render_selection(const char* str, bool is_active) {
+    if (is_active) {
+        oled_write_char('#', false);
+    } else {
+        oled_write_char(' ', false);
+    }
+
+    oled_write(str, false);
+    if (strlen(str) < 4) {
+        oled_advance_page(false);
+    }
+}
+
+void oled_render_layers(void) {
+    const char* layers[] = {
+        "Base", "Swed", "Numb", "Symb", "Nav", "Etc",
+    };
     uint8_t current_layer = get_highest_layer(layer_state);
 
-    char* const layers[] = {
-        "Bas", "Swe", "Num", "Sym", "Nav", "Etc",
-    };
+    for (uint8_t layer = 0; layer < 6; ++layer) {
+        oled_render_selection(layers[layer], (current_layer == layer));
+    }
+}
 
+void oled_render_locks(void) {
+    led_t led_config = host_keyboard_led_state();
+    oled_render_selection("Word", is_caps_word_on());
+    oled_render_selection("Caps", led_config.caps_lock);
+    oled_render_selection("Scrl", led_config.num_lock);
+    oled_render_selection("Num", led_config.num_lock);
+}
+
+static void oled_render_layer_state(void) {
+    oled_clear();
+
+    oled_write_P(PSTR("-----"), false);
     oled_write_P(PSTR("LAYER"), false);
     oled_write_P(PSTR("-----"), false);
 
-    for (enum Layers layer = Base; layer < Etc; ++layer) {
-        if (current_layer == layer) {
-            oled_write_char('#', false);
-        } else {
-            // const char layer_number = (char)layer + '0';
-            // oled_write(&layer_number, false);
-            oled_write_char(' ', false);
-        }
-
-        oled_write_char(' ', false);
-        oled_write(layers[layer], false);
-    }
+    oled_render_layers();
 
     oled_write_P(PSTR("-----"), false);
+    oled_write_P(PSTR("LOCKS"), false);
+    oled_write_P(PSTR("-----"), false);
 
-    led_t led_config = host_keyboard_led_state();
-    if (led_config.caps_lock) {
-        oled_write_P(PSTR("CAPS "), false);
-    } else if (is_caps_word_on()) {
-        oled_write_P(PSTR("WORD "), false);
-    } else {
-        oled_advance_page(true);
-    }
-    oled_write_ln_P(PSTR("-----"), false);
+    oled_render_locks();
+
 }
 
 void my_oled_render_logo(void) {
@@ -53,7 +67,7 @@ void my_oled_render_logo(void) {
 
 bool oled_task_user(void) {
     if (is_keyboard_master()) {
-      oled_render_layer_state();
+        oled_render_layer_state();
     } else {
         my_oled_render_logo();
     }
