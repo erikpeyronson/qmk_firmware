@@ -5,6 +5,10 @@
 
 #include "print.h"
 
+#include <ctype.h>
+
+#define OLED_CHARS_PER_LINE 6
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
         rotation = OLED_ROTATION_270;
@@ -12,14 +16,22 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     return rotation;
 }
 
+void oled_write_captalized(const char* str, bool invert) {
+    for (uint8_t i = 0; i < strlen(str); ++i) {
+      oled_write_char(toupper(str[i]),false);
+    }
+}
+
+
 void oled_render_selection(const char* str, bool is_active) {
     if (is_active) {
         oled_write_char('*', false);
+        oled_write_captalized(str, false);
     } else {
         oled_write_char(' ', false);
+        oled_write(str, false);
     }
 
-    oled_write(str, false);
     if (strlen(str) < 4) {
         oled_advance_page(false);
     }
@@ -58,7 +70,6 @@ static void oled_render_layer_state(void) {
     oled_write_P(PSTR("-----"), false);
 
     oled_render_locks();
-
 }
 
 void my_oled_render_logo(void) {

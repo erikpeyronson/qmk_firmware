@@ -7,7 +7,7 @@
 #include "transactions.h"
 // clang-format on
 
-RgbMode current_mode = EACH_KEY;
+RgbMode current_mode = THUMBS_SOLID;
 
 struct ColorBinding {
     uint16_t red;
@@ -123,15 +123,44 @@ void thumbs_only(void) {
     }
 }
 
-bool rgb_matrix_indicators_user() {
-    // enum RgbMode mode = THUMBS_ONLY;
+void thumbs_solid(void) {
+    uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
 
+    // let each half light their own
+    uint8_t row;
+    if (is_keyboard_master()) {
+        row = 3;
+    } else {
+        row = 7;
+    }
+
+    // thumb key indexes
+    uint8_t             first_column = 3;
+    uint8_t             last_column  = 5;
+    struct ColorBinding rgb;
+    if (current_layer == Swe && is_keyboard_left()) {
+        rgb = (struct ColorBinding){RGB_BLUE};
+
+    } else {
+        rgb = get_color(current_layer);
+    }
+
+    for (uint8_t col = first_column; col < last_column + 1; ++col) {
+        uint8_t led_index = g_led_config.matrix_co[row][col];
+        rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
+    }
+}
+
+bool rgb_matrix_indicators_user() {
     switch (current_mode) {
         case EACH_KEY:
             each_key();
             break;
-        case THUMBS_ONLY:
+        case THUMBS_HINT:
             thumbs_only();
+            break;
+        case THUMBS_SOLID:
+            thumbs_solid();
             break;
         default:
             break;
