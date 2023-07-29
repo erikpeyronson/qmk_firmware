@@ -74,16 +74,43 @@ uint16_t my_get_tapped_kc(uint16_t keycode) {
     return keycode;
 }
 
-// #define IS_SHIFTED_KC
+#define IS_KC_SHIFTED_SYMBOL(code) (keycode >> 8 & 0x02)
 
 void my_set_keylog(uint16_t keycode, keyrecord_t *record) {
     my_key_name     = ' ';
     my_last_keycode = keycode;
 
-    if (keycode >> 8 & 0x02) {
+    if (IS_KC_SHIFTED_SYMBOL(keycode)) {
         switch (QK_MODS_GET_BASIC_KEYCODE(keycode)) {
-            case 0x1e:
+            case 0x1E:
                 my_key_name = '!';
+                return;
+            case 0x1F:
+                my_key_name = '@';
+                return;
+            case 0x20:
+                my_key_name = '#';
+                return;
+            case 0x21:
+                my_key_name = '$';
+                return;
+            case 0x22:
+                my_key_name = '%';
+                return;
+            case 0x23:
+                my_key_name = '^';
+                return;
+            case 0x24:
+                my_key_name = '&';
+                return;
+            case 0x25:
+                my_key_name = '*';
+                return;
+            case 0x26:
+                my_key_name = '(';
+                return;
+            case 0x27:
+                my_key_name = ')';
                 return;
         }
     }
@@ -176,11 +203,10 @@ static void my_oled_render_keylog(void) {
     uint8_t cols = 5;
     for (size_t i = 0; i < rows; i++) {
         for (size_t k = 0; k < cols; k++) {
-            // my_last_keycode = ;
+            // olmy_last_keycode = ;
             // my_set_keylog(keymaps[i][k], NULL);
             // oled_set_cursor(k, i);
             oled_write_char(keymap_chars[current_layer][i][k], false);
-            // oled_write_char(my_key_name, false);
         }
     }
 }
