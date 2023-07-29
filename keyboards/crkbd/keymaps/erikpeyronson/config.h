@@ -112,3 +112,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SPLIT_TRANSACTION_IDS_USER SYNC_RGB_MODE
 
 // #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+
+
+#define OLED_FONT_H "keyboards/crkbd/keymaps/erikpeyronson/glcdfont.c"
