@@ -8,6 +8,7 @@
 #include "common.h"
 #include "transactions.h"
 #include "oled.h"
+#include "keymap_helpers.h"
 
 #include "keymap_out.h"
 
@@ -42,7 +43,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
     uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 
-    // uprintf("basic keycode : %04X \n\n", my_get_tapped_kc(keycode));
+    uprintf("Character reprentation: %c \n\n", keycode_to_char(keycode, NULL));
 #endif
 
     switch (keycode) {
