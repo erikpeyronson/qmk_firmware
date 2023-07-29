@@ -158,19 +158,45 @@ void my_set_keylog(uint16_t keycode, keyrecord_t *record) {
 }
 
 void my_set_keymap_chars(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS]) {
-    uint8_t rows = 3;
-    uint8_t cols = 6;
+    uint8_t no_cols   = 5;
+    uint8_t first_col = 1;
+
+    uint8_t no_rows = 3;
+    uint8_t first_row;
+
+    uint8_t invert_offset;
+
+    if (is_keyboard_master()) {
+        first_row     = 0;
+        invert_offset = 0;
+    } else {
+        first_row     = 4;
+        invert_offset = 6;
+    }
+    (void)invert_offset;
+
     for (uint8_t layer = 0; layer < 6; ++layer) {
-        for (size_t i = 0; i < rows; i++) {
-            for (size_t k = 1; k < cols; k++) {
+        for (size_t row = first_row; row < first_row + no_rows; row++) {
+            for (size_t col = first_col; col < first_col + no_cols; col++) {
                 // my_last_keycode = ;
-                keypos_t keypos = {k, i};
+                keypos_t keypos = {col, row};
                 uint16_t kc     = keymap_key_to_keycode(layer, keypos);
+                char    *char_to_set;
+                if (is_keyboard_master()) {
+                    char_to_set = &keymap_chars[layer][row - first_row][col - first_col];
+                } else {
+                    char_to_set = &keymap_chars[layer][row - first_row][invert_offset - col - first_col];
+                }
+
                 if (kc == KC_TRANSPARENT || kc == KC_NO) {
-                    keymap_chars[layer][i][k - 1] = ' ';
+                    // keymap_chars[layer][row - first_row][col - first_col - invert_offset] = ' ';
+                    // keymap_chars[layer][row - first_row][invert_offset - col - first_col] = ' ';
+                    *char_to_set = ' ';
                 } else {
                     my_set_keylog(kc, NULL);
-                    keymap_chars[layer][i][k - 1] = my_key_name;
+                    // keymap_chars[layer][row - first_row][col - first_col - invert_offset] = my_key_name;
+                    // keymap_chars[layer][row - first_row][invert_offset - col - first_col] = my_key_name;
+                    *char_to_set = my_key_name;
                 }
                 // oled_write_char(my_key_name, false);
             }
@@ -185,36 +211,22 @@ void my_set_keymap_chars(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS]) {
 // }
 
 static void my_oled_render_keylog(void) {
-    // const char *last_row_str = get_u8_str(last_row, ' ');
-    // oled_write(depad_str(last_row_str, ' '), false);
-    // oled_write_P(PSTR("x"), false);
-    // const char *last_col_str = get_u8_str(last_col, ' ');
-    // oled_write(depad_str(last_col_str, ' '), false);
-    // oled_write_P(PSTR(", k"), false);
-    // const char *last_keycode_str = get_u16_str(last_keycode, ' ');
-    // oled_write(depad_str(last_keycode_str, ' '), false);
-    // oled_write_P(PSTR(":"), false);
-    // oled_write_char(my_key_name, false);
-    // oled_write_char('@', false);
-
     uint8_t current_layer = get_highest_layer(layer_state);
 
     uint8_t rows = 3;
     uint8_t cols = 5;
     for (size_t i = 0; i < rows; i++) {
         for (size_t k = 0; k < cols; k++) {
-            // olmy_last_keycode = ;
-            // my_set_keylog(keymaps[i][k], NULL);
-            // oled_set_cursor(k, i);
             oled_write_char(keymap_chars[current_layer][i][k], false);
         }
+        oled_advance_page(true);
     }
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (is_keyboard_master()) {
-        rotation = OLED_ROTATION_270;
-    }
+    // if (is_keyboard_master()) {
+    rotation = OLED_ROTATION_270;
+    // }
     return rotation;
 }
 
@@ -260,17 +272,19 @@ void oled_render_locks(void) {
 static void oled_render_layer_state(void) {
     oled_clear();
 
-    oled_write_P(PSTR("-----"), false);
-    oled_write_P(PSTR("LAYER"), false);
-    oled_write_P(PSTR("-----"), false);
+    if (is_keyboard_master()) {
+        oled_write_P(PSTR("LAYER"), false);
+        oled_write_P(PSTR("-----"), false);
+        oled_render_layers();
+    } else {
+        oled_write_P(PSTR("LOCKS"), false);
+        oled_write_P(PSTR("-----"), false);
+        oled_render_locks();
+        oled_advance_page(true);
+    }
 
-    oled_render_layers();
-
     oled_write_P(PSTR("-----"), false);
-    oled_write_P(PSTR("LOCKS"), false);
-    oled_write_P(PSTR("-----"), false);
-
-    oled_render_locks();
+    oled_advance_page(true);
 }
 
 void my_oled_render_logo(void) {
@@ -278,12 +292,12 @@ void my_oled_render_logo(void) {
 }
 
 bool oled_task_user(void) {
-    if (!is_keyboard_master()) {
-        oled_render_layer_state();
-    } else {
-        // my_oled_render_logo();
-        my_oled_render_keylog();
-    }
+    // if (!is_keyboard_master()) {
+    oled_render_layer_state();
+    // } else {
+    // my_oled_render_logo();
+    my_oled_render_keylog();
+    // }
 
     return false;
 }
