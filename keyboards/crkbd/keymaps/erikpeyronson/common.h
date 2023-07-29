@@ -11,3 +11,5 @@ enum KeyCodes { MY_CYCLE_RGB_MODE = SAFE_RANGE };
 typedef struct _my_state_t {
     RgbMode rgb_mode;
 } my_state_t;
+
+#define MY_LT(layer, kc) LT(layer, kc)

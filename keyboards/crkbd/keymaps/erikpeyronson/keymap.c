@@ -7,9 +7,12 @@
 #include "logo.h"
 #include "common.h"
 #include "transactions.h"
+#include "oled.h"
+
+#include "keymap_out.h"
 
 
-#define MY_LT(layer, kc) LT(layer, kc)
+
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
@@ -30,6 +33,7 @@ void keyboard_post_init_user(void) {
     debug_mouse    = false;
 
     transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
+    my_set_keymap_chars(keymaps);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
@@ -37,6 +41,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 #ifdef CONSOLE_ENABLE
     uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
+
+    // if (record->event.pressed) {
+    //     my_set_keylog(keycode, record);
+    // }
 
 
     switch (keycode) {
@@ -50,9 +58,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             return false; // Skip all further processing of this key
         }
 #endif
+
     }
 
     return true;
 }
 
-#include "keymap_out.h"
+layer_state_t layer_state_set_user(layer_state_t state)	{
+  my_set_keymap_chars(keymaps);
+  return state;
+}
+
+
+
