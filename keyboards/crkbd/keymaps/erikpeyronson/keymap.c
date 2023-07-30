@@ -30,8 +30,6 @@ void keyboard_post_init_user(void) {
     my_set_keymap_chars(keymaps);
 }
 
-#define MY_SEND_BRACKETS(characters) SEND_STRING(characters SS_TAP(X_LEFT));
-
 void send_closed_braces(char open, char close) {
     // println("Function called");
     // SEND_STRING("{}" SS_TAP(X_LEFT));
@@ -57,39 +55,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         }
 #endif
-        case MY_SEND_PARENTHESES: {
-            if (record->event.pressed) {
-                SEND_STRING("{");
-            } else {
-                if (record->event.time > TAPPING_TERM) {
-                    SEND_STRING("}" SS_TAP(X_LEFT));
-                }
-            }
-            return false;
-        }
-        case MY_SEND_SQUARE_BRACKETS: {
-            if (record->event.pressed) {
-                MY_SEND_BRACKETS("[]");
-            }
-            return false;
-        }
-        case MY_SEND_CURLY_BRACKETS: {
-            if (record->event.time > 100) {
-                MY_SEND_BRACKETS("{}");
-            }
-            if (record->event.pressed) {
-                SEND_STRING("{");
-            }
-            return false;
-        }
-        case MY_SEND_LT_GT: {
-            if (record->event.pressed) {
-                MY_SEND_BRACKETS("<>");
-            }
-            return false;
-        }
     }
-
     return true;
 }
 
@@ -129,10 +95,7 @@ int cur_dance(tap_dance_state_t *state) {
         return 8; // magic number. At some point this method will expand to work for more presses
 }
 
-
 static tap xtap_state = {.is_press_action = true, .state = 0};
-
-extern bracket_info_t brackets[];
 
 void td_curly_bracked_finished(tap_dance_state_t *state, void *user_data) {
     bracket_info_t *bracket_info = (bracket_info_t *)user_data;
