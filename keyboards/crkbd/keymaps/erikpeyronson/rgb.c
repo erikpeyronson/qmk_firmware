@@ -5,6 +5,7 @@
 #include "rgb_matrix.h"
 #include "common.h"
 #include "transactions.h"
+#include "keymap_helpers.h"
 // clang-format on
 
 RgbMode current_mode = THUMBS_SOLID;
@@ -42,21 +43,6 @@ struct ColorBinding get_color(uint16_t layer) {
         default:
             return (struct ColorBinding){RGB_OFF};
     }
-}
-
-int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos) {
-    uint16_t kc = keymap_key_to_keycode(layer, keypos);
-
-    while (layer > 0 && (kc == KC_TRANSPARENT || IS_LAYER_OFF(layer))) {
-        layer--;
-        kc = keymap_key_to_keycode(layer, keypos);
-    }
-
-    if (kc != KC_NO && kc != KC_TRANSPARENT) {
-        return layer;
-    }
-
-    return -1;
 }
 
 void each_key(void) {

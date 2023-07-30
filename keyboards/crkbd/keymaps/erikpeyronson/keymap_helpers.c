@@ -79,3 +79,18 @@ char keycode_to_char(uint16_t keycode, keyrecord_t *record) {
     // update keylog
     return pgm_read_byte(&code_to_name[keycode]);
 }
+
+int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos) {
+    uint16_t kc = keymap_key_to_keycode(layer, keypos);
+
+    while (layer > 0 && (kc == KC_TRANSPARENT || IS_LAYER_OFF(layer))) {
+        layer--;
+        kc = keymap_key_to_keycode(layer, keypos);
+    }
+
+    if (kc != KC_NO && kc != KC_TRANSPARENT) {
+        return layer;
+    }
+
+    return -1;
+}

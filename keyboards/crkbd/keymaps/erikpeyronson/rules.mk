@@ -2,7 +2,7 @@ RGBLIGHT_ENABLE = no
 
 TAP_DANCE_ENABLE = yes
 CAPS_WORD_ENABLE = yes
-RGB_MATRIX_ENABLE = no
+RGB_MATRIX_ENABLE = yes
 
 SRC += keymap_helpers.c
 
@@ -12,4 +12,4 @@ endif
 
 SRC += oled.c
 
-CONSOLE_ENABLE = yes
+CONSOLE_ENABLE = no
