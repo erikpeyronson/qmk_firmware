@@ -5,6 +5,25 @@
 static const char PROGMEM code_to_name[60] = {' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
 
 char keycode_to_char(uint16_t keycode, keyrecord_t *record) {
+    if (MY_IS_QK_TAP_DANCE(keycode)) {
+        uprintf("keycode in tapdance conversion: 0x%4x \n", keycode);
+        keycode = QK_MODS_GET_BASIC_KEYCODE(keycode);
+        uprintf("Basic keycode: 0x%04x \n", keycode);
+
+        switch (keycode) {
+            case TD_CURLY_BRACKETS:
+                return '}';
+            case TD_SQUARE_BRACKETS:
+                return ']';
+            case TD_PARENTESES:
+                return ')';
+            case TD_LTGT:
+                return '>';
+            default:
+              return (char)0x07;
+        }
+    }
+
     if (IS_QK_MOD_TAP(keycode)) {
         println("Mod tap");
         keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
@@ -36,7 +55,6 @@ char keycode_to_char(uint16_t keycode, keyrecord_t *record) {
                 return '{';
             case 0x30:
                 return '}';
-
         }
     }
 
@@ -94,3 +112,11 @@ int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos) {
 
     return -1;
 }
+
+bracket_info_t brackets[] = {
+    [TD_CURLY_BRACKETS]  = {KC_LEFT_BRACKET, KC_RIGHT_BRACKET, true},
+    [TD_SQUARE_BRACKETS] = {KC_LEFT_BRACKET, KC_RIGHT_BRACKET, false},
+    [TD_PARENTESES]      = {KC_9, KC_0, true},
+    [TD_LTGT]            = {KC_COMMA, KC_DOT, true},
+};
+
