@@ -13,7 +13,7 @@
 char keymap_chars[6][3][5];
 
 
-void my_set_keymap_chars(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS]) {
+void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS]) {
     uint8_t no_cols   = 5;
     uint8_t first_col = 1;
 

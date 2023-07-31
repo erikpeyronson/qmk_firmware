@@ -1,7 +1,7 @@
 #include QMK_KEYBOARD_H
 
 #include "keyboard.h"
-#include "oled_driver.h"
+#include "oled.h"
 #include "quantum.h"
 #include "transactions.h"
 #include "process_tap_dance.h"
@@ -27,7 +27,7 @@ void keyboard_post_init_user(void) {
     debug_mouse    = false;
 
     transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
-    my_set_keymap_chars(keymaps);
+    my_oled_init(keymaps);
 }
 
 void send_closed_braces(char open, char close) {
