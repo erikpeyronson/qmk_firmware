@@ -115,4 +115,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 
+#undef OLED_FONT_H
 #define OLED_FONT_H "keyboards/crkbd/keymaps/erikpeyronson/glcdfont.c"
+#define OLED_SCREENSAVER_TIMEOUT 2000
