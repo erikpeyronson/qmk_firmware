@@ -1,4 +1,5 @@
 #include "keymap_helpers.h"
+#include "tap_dance.h"
 
 #define IS_KC_SHIFTED_SYMBOL(code) (keycode >> 8 & 0x02)
 

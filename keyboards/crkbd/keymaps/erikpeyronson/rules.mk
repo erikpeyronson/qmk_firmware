@@ -1,6 +1,6 @@
 RGBLIGHT_ENABLE = no
 
-TAP_DANCE_ENABLE = yes
+
 CAPS_WORD_ENABLE = yes
 
 CONSOLE_ENABLE = no
@@ -17,3 +17,8 @@ ifeq ($(strip $(OLED_ENABLE)), yes)
 	SRC += oled.c
 endif
 
+
+TAP_DANCE_ENABLE = yes
+ifeq ($(strip $(TAP_DANCE_ENABLE)), yes)
+	SRC += tap_dance.c
+endif
