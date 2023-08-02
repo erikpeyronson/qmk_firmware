@@ -1,12 +1,12 @@
 ---
-BasedOnStyle: Google
+BasedOnStyle: GNU
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: 'true'
 AlignConsecutiveDeclarations: 'true'
 AlignOperands: 'true'
 AllowAllParametersOfDeclarationOnNextLine: 'false'
 AllowShortCaseLabelsOnASingleLine: 'false'
-AllowShortFunctionsOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
@@ -16,7 +16,7 @@ BinPackParameters: 'true'
 ColumnLimit: '1000'
 IndentCaseLabels: 'true'
 IndentPPDirectives: AfterHash
-IndentWidth: '4'
+IndentWidth: '2'
 MaxEmptyLinesToKeep: '1'
 PointerAlignment: Right
 SortIncludes: 'false'
@@ -26,5 +26,6 @@ SpaceInEmptyParentheses: 'false'
 SpacesBeforeTrailingComments: 1
 TabWidth: '4'
 UseTab: Never
+AllowShortEnumsOnASingleLine: false
 
 ...

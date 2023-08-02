@@ -1,7 +1,6 @@
 #ifndef KEYMAP_HELPERS_H
 #define KEYMAP_HELPERS_H
 
-
 #include "quantum.h"
 #include "common.h"
 
@@ -11,10 +10,11 @@
 char   keycode_to_char(uint16_t keycode, keyrecord_t *record);
 int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos);
 
-typedef struct {
-    uint16_t kc_open;
-    uint16_t kc_close;
-    bool     is_shifted;
+typedef struct
+{
+  uint16_t kc_open;
+  uint16_t kc_close;
+  bool     is_shifted;
 } bracket_info_t;
 
 extern bracket_info_t brackets[4];
