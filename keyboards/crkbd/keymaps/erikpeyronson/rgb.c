@@ -24,6 +24,7 @@ void my_rgb_init(void) {
     // Turn all leds off during startup
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
     rgb_matrix_sethsv_noeeprom(HSV_OFF);
+    transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
 }
 
 struct ColorBinding get_color(uint16_t layer) {

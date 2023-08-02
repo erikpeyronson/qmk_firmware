@@ -16,17 +16,14 @@
 #include "keymap_out.h"
 
 void keyboard_post_init_user(void) {
-#ifdef RGB_MATRIX_ENABLE
-    my_rgb_init();
-#endif
-
     // Customise these values to desired behaviour
     debug_enable   = false;
     debug_matrix   = false;
     debug_keyboard = false;
     debug_mouse    = false;
 
-    transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
+
+    my_rgb_init();
     my_oled_init(keymaps);
 }
 
