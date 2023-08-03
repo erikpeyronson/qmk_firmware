@@ -135,7 +135,7 @@ static void oled_render_locks(void)
 
 void oled_render_info(void)
 {
-  oled_clear();
+  oled_render();
   if (is_keyboard_master())
     {
       oled_render_layers();
@@ -143,10 +143,10 @@ void oled_render_info(void)
   else
     {
       oled_render_locks();
-      oled_advance_page(true);
+      oled_advance_page(false);
     }
 
-  oled_advance_page(true);
+  oled_advance_page(false);
   my_oled_render_keylog();
 }
 
@@ -161,7 +161,9 @@ void oled_render_logo(void) {
 
 bool oled_screen_saver(bool turn_on)
 {
-
+  if (screen_saver_on == turn_on) {
+    return screen_saver_on;
+  }
   if (!screen_saver_on && turn_on)
     {
       oled_clear();
@@ -173,9 +175,9 @@ bool oled_screen_saver(bool turn_on)
     }
   else if (screen_saver_on && !turn_on)
     {
+      oled_clear();
       screen_saver_on = false;
       oled_scroll_off();
-      oled_clear();
       oled_set_brightness(brigtness);
     }
 

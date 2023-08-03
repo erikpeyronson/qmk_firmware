@@ -2,12 +2,16 @@ RGBLIGHT_ENABLE = no
 
 CAPS_WORD_ENABLE = yes
 
-CONSOLE_ENABLE = no
 
 SRC += keymap_helpers.c
 
 # Optional features
+
+# CONSOLE_ENABLE = yes
+# RGB_MATRIX_ENABLE = no
+CONSOLE_ENABLE = no
 RGB_MATRIX_ENABLE = yes
+
 OLED_ENABLE = yes
 
 ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)

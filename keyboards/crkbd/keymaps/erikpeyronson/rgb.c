@@ -8,7 +8,7 @@
 #include "keymap_helpers.h"
 // clang-format on
 
-RgbMode current_mode = THUMBS_SOLID;
+RgbMode current_mode = EACH_KEY;
 
 struct ColorBinding
 {
@@ -30,25 +30,19 @@ void my_rgb_init(void)
   transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
 }
 
+static struct ColorBinding binding[] = {
+  [Base] = {RGB_WHITE}, [Swe] = {RGB_YELLOW}, [Num] = {RGB_BLUE}, [Sym] = { RGB_GREEN}, [Nav] = {RGB_ORANGE}, [Etc] = {RGB_RED}, [End] = {RGB_OFF} ,
+};
+
 struct ColorBinding get_color(uint16_t layer)
 {
-  switch (layer)
+
+  if (layer > End)
     {
-      case Base:
-        return (struct ColorBinding){ RGB_WHITE };
-      case Swe:
-        return (struct ColorBinding){ RGB_YELLOW };
-      case Num:
-        return (struct ColorBinding){ RGB_BLUE };
-      case Sym:
-        return (struct ColorBinding){ RGB_GREEN };
-      case Nav:
-        return (struct ColorBinding){ RGB_ORANGE };
-      case Etc:
-        return (struct ColorBinding){ RGB_RED };
-      default:
-        return (struct ColorBinding){ RGB_OFF };
+      layer = End;
     }
+
+  return binding[layer];
 }
 
 void each_key(void)
@@ -187,6 +181,10 @@ bool rgb_matrix_indicators_user()
 void set_rgb_mode(RgbMode mode)
 {
   current_mode = mode;
+}
+RgbMode get_rgb_mode(void)
+{
+  return current_mode;
 }
 
 void my_next_rgb_mode(void)

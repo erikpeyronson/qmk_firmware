@@ -63,21 +63,24 @@ layer_state_t layer_state_set_user(layer_state_t state)
   return state;
 }
 
-static bool is_idle  = true;
+static bool is_idle  = false;
 
 void housekeeping_task_user(void)
 {
-
+  static RgbMode old_rgb_mode;
   uint32_t idle_time = last_input_activity_elapsed();
 
   if (!is_idle && idle_time > OLED_SCREENSAVER_TIMEOUT)
     {
+      old_rgb_mode = get_rgb_mode();
+      set_rgb_mode(OFF);
       oled_screen_saver(true);
       is_idle = true;
     }
   else if (is_idle && idle_time < OLED_SCREENSAVER_TIMEOUT)
     {
       oled_screen_saver(false);
+      set_rgb_mode(old_rgb_mode);
       is_idle = false;
     }
 }
