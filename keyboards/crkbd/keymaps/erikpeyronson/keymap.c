@@ -62,3 +62,22 @@ layer_state_t layer_state_set_user(layer_state_t state)
   // my_set_keymap_chars(keymaps);
   return state;
 }
+
+static bool is_idle  = true;
+
+void housekeeping_task_user(void)
+{
+
+  uint32_t idle_time = last_input_activity_elapsed();
+
+  if (!is_idle && idle_time > OLED_SCREENSAVER_TIMEOUT)
+    {
+      oled_screen_saver(true);
+      is_idle = true;
+    }
+  else if (is_idle && idle_time < OLED_SCREENSAVER_TIMEOUT)
+    {
+      oled_screen_saver(false);
+      is_idle = false;
+    }
+}

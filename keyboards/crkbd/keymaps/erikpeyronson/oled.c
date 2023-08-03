@@ -10,7 +10,7 @@
 
 #define OLED_CHARS_PER_LINE 6
 
-char keymap_chars[6][3][5];
+static char keymap_chars[6][3][5];
 
 void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS])
 {
@@ -32,7 +32,6 @@ void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS])
       first_row     = 4;
       invert_offset = 6;
     }
-  (void)invert_offset;
 
   for (uint8_t layer = 0; layer < 6; ++layer)
     {
@@ -112,14 +111,11 @@ static void oled_render_selection(const char *str, bool is_active)
 
 static void oled_render_layers(void)
 {
-  // const char *layers[] = {
-  //   "Base", "Swed", "Numb", "Symb", "Nav", "Etc",
-  // };
   uint8_t current_layer = get_highest_layer(layer_state);
 
   oled_write_P(PSTR("LAYER"), false);
   oled_write_P(PSTR("-----"), false);
-  for (Layer layer = Base; layer < Etc; ++layer)
+  for (Layer layer = Base; layer < End; ++layer)
     {
       oled_render_selection(layer_to_string(layer), (current_layer == layer));
     }
@@ -137,9 +133,9 @@ static void oled_render_locks(void)
   oled_render_selection("Num", led_config.num_lock);
 }
 
-static void oled_render_info(void)
+void oled_render_info(void)
 {
-
+  oled_clear();
   if (is_keyboard_master())
     {
       oled_render_layers();
@@ -154,36 +150,45 @@ static void oled_render_info(void)
   my_oled_render_keylog();
 }
 
-bool oled_screen_saver(void)
-{
-  static bool screen_saver_on = false;
-  uint32_t idle_time =  last_input_activity_elapsed();
+static uint8_t brigtness = 0;
 
-  if (!screen_saver_on && idle_time > OLED_SCREENSAVER_TIMEOUT)
+static bool screen_saver_on = false;
+
+void oled_render_logo(void) {
+      oled_write_raw_P(raw_logo, sizeof(raw_logo));
+      oled_scroll_left();
+}
+
+bool oled_screen_saver(bool turn_on)
+{
+
+  if (!screen_saver_on && turn_on)
     {
       oled_clear();
+      brigtness = oled_get_brightness();
+      oled_set_brightness(OLED_SCREENSAVER_BRIGHTNESS);
       oled_scroll_set_speed(4);
-      oled_write_raw_P(raw_logo, sizeof(raw_logo));
       oled_scroll_left();
       screen_saver_on = true;
     }
-  else if (screen_saver_on && idle_time < OLED_SCREENSAVER_TIMEOUT)
+  else if (screen_saver_on && !turn_on)
     {
       screen_saver_on = false;
       oled_scroll_off();
       oled_clear();
+      oled_set_brightness(brigtness);
     }
-    if (screen_saver_on) {
-      oled_scroll_left();
-    }
+
     return screen_saver_on;
 }
 
 bool oled_task_user(void)
 {
-  if (!oled_screen_saver())
+  if (!screen_saver_on)
     {
       oled_render_info();
+    } else {
+      oled_render_logo();
     }
 
   return false;

@@ -19,7 +19,9 @@ typedef enum
   Num,
   Sym,
   Nav,
-  Etc
+  Etc,
+  // Not an actual layer, used to end loop conditions and has to be last
+  End
 } Layer;
 
 #define RGB_KEYCODE_OFFSET SAFE_RANGE

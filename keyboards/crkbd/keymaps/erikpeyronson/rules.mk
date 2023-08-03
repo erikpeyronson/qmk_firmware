@@ -17,6 +17,7 @@ endif
 ifeq ($(strip $(OLED_ENABLE)), yes)
 	SRC += oled.c
 endif
+	# SRC += oled.c
 
 # Possible to disable but obviously keymap doesnt make much sense without it
 TAP_DANCE_ENABLE = yes
