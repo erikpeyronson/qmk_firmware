@@ -5,6 +5,21 @@
 
 static const char PROGMEM code_to_name[60] = { ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' ' };
 
+const char* layer_strings[] = {
+  [Base] = "Base",
+  [Swe] = "Swe" ,
+  [Num] = "Num" ,
+  [Sym] = "Sym" ,
+  [Nav] = "Nav" ,
+  [Etc] = "Etc"
+};
+
+
+const char* layer_to_string(Layer layer) {
+  return layer_strings[layer];
+}
+
+
 char keycode_to_char(uint16_t keycode, keyrecord_t *record)
 {
   if (MY_IS_QK_TAP_DANCE(keycode))

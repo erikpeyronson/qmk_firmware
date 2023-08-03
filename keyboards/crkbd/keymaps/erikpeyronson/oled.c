@@ -112,16 +112,16 @@ static void oled_render_selection(const char *str, bool is_active)
 
 static void oled_render_layers(void)
 {
-  const char *layers[] = {
-    "Base", "Swed", "Numb", "Symb", "Nav", "Etc",
-  };
+  // const char *layers[] = {
+  //   "Base", "Swed", "Numb", "Symb", "Nav", "Etc",
+  // };
   uint8_t current_layer = get_highest_layer(layer_state);
 
   oled_write_P(PSTR("LAYER"), false);
   oled_write_P(PSTR("-----"), false);
-  for (uint8_t layer = 0; layer < 6; ++layer)
+  for (Layer layer = Base; layer < Etc; ++layer)
     {
-      oled_render_selection(layers[layer], (current_layer == layer));
+      oled_render_selection(layer_to_string(layer), (current_layer == layer));
     }
 }
 

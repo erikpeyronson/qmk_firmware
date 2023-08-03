@@ -2,7 +2,7 @@
 
 #include "quantum.h"
 
-enum TapDanceActions
+typedef enum
 {
   TD_CURLY_BRACKETS = 0,
   TD_SQUARE_BRACKETS,
@@ -10,9 +10,9 @@ enum TapDanceActions
   TD_LTGT,
   TD_SWE,
   TD_BASE
-};
+} TapDanceActions;
 
-enum Layers
+typedef enum
 {
   Base = 0,
   Swe,
@@ -20,7 +20,7 @@ enum Layers
   Sym,
   Nav,
   Etc
-};
+} Layer;
 
 #define RGB_KEYCODE_OFFSET SAFE_RANGE
 #define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
