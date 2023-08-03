@@ -10,17 +10,17 @@
 
 RgbMode current_mode = EACH_KEY;
 
-struct ColorBinding
+typedef struct
 {
   uint16_t red;
   uint16_t green;
   uint16_t blue;
-};
+} rgb_color_t;
 
-typedef struct _master_to_slave_t
+typedef struct
 {
   int rgb_mode;
-} master_to_slave_t;
+} rgb_state_t;
 
 void my_rgb_init(void)
 {
@@ -30,19 +30,27 @@ void my_rgb_init(void)
   transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
 }
 
-static struct ColorBinding binding[] = {
-  [Base] = {RGB_WHITE}, [Swe] = {RGB_YELLOW}, [Num] = {RGB_BLUE}, [Sym] = { RGB_GREEN}, [Nav] = {RGB_ORANGE}, [Etc] = {RGB_RED}, [End] = {RGB_OFF} ,
+// clang-format off
+static rgb_color_t layer_colors[] = {
+  [LAYER_BASE] = { RGB_WHITE  },
+  [LAYER_SWE]  = { RGB_YELLOW },
+  [LAYER_NUM]  = { RGB_BLUE   },
+  [LAYER_SYM]  = { RGB_GREEN  },
+  [LAYER_NAV]  = { RGB_ORANGE },
+  [LAYER_ETC]  = { RGB_RED    },
+  [LAYER_END]  = { RGB_OFF    },
 };
+// clang-format on
 
-struct ColorBinding get_color(uint16_t layer)
+rgb_color_t get_color(uint16_t layer)
 {
 
-  if (layer > End)
+  if (layer > LAYER_END)
     {
-      layer = End;
+      layer = LAYER_END;
     }
 
-  return binding[layer];
+  return layer_colors[layer];
 }
 
 void each_key(void)
@@ -67,10 +75,10 @@ void each_key(void)
     {
       for (int col = 0; col < 6; ++col)
         {
-          keypos_t            current_key = { .col = col, .row = row };
-          uint8_t             led_index   = g_led_config.matrix_co[row][col];
-          uint8_t             layer       = get_layer_with_key(current_layer, current_key);
-          struct ColorBinding rgb         = get_color(layer);
+          keypos_t    current_key = { .col = col, .row = row };
+          uint8_t     led_index   = g_led_config.matrix_co[row][col];
+          uint8_t     layer       = get_layer_with_key(current_layer, current_key);
+          rgb_color_t rgb         = get_color(layer);
 
           rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
         }
@@ -98,22 +106,22 @@ void thumbs_only(void)
 
   for (uint8_t col = first_column; col < last_column + 1; ++col)
     {
-      keypos_t            current_key = { .col = col, .row = row };
-      struct ColorBinding rgb;
+      keypos_t    current_key = { .col = col, .row = row };
+      rgb_color_t rgb;
 
       uint8_t led_index = g_led_config.matrix_co[row][col];
 
       // If we are on the base layer use the target layer, otherwise just
       // display which layer we are at
-      if (current_layer == Base)
+      if (current_layer == LAYER_BASE)
         {
           uint16_t kc           = keymap_key_to_keycode(0, current_key);
           uint8_t  target_layer = QK_LAYER_TAP_GET_LAYER(kc);
           rgb                   = get_color(target_layer);
         }
-      else if (current_layer == Swe && is_keyboard_left())
+      else if (current_layer == LAYER_SWE && is_keyboard_left())
         {
-          rgb = (struct ColorBinding){ RGB_BLUE };
+          rgb = (rgb_color_t){ RGB_BLUE };
         }
       else
         {
@@ -140,12 +148,12 @@ void thumbs_solid(void)
     }
 
   // thumb key indexes
-  uint8_t             first_column = 3;
-  uint8_t             last_column  = 5;
-  struct ColorBinding rgb;
-  if (current_layer == Swe && is_keyboard_left())
+  uint8_t     first_column = 3;
+  uint8_t     last_column  = 5;
+  rgb_color_t rgb;
+  if (current_layer == LAYER_SWE && is_keyboard_left())
     {
-      rgb = (struct ColorBinding){ RGB_BLUE };
+      rgb = (rgb_color_t){ RGB_BLUE };
     }
   else
     {
@@ -193,14 +201,14 @@ void my_next_rgb_mode(void)
     {
       current_mode = 0;
     }
-  master_to_slave_t m2s = { current_mode };
+  rgb_state_t m2s = { current_mode };
   transaction_rpc_exec(SYNC_RGB_MODE, sizeof(m2s), &m2s, 0, NULL);
 }
 
 void sync_rgb_mode(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data)
 {
-  const master_to_slave_t *m2s = (const master_to_slave_t *)in_data;
-  current_mode                 = m2s->rgb_mode;
+  const rgb_state_t *m2s = (const rgb_state_t *)in_data;
+  current_mode           = m2s->rgb_mode;
 }
 
 #endif

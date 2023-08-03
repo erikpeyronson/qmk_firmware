@@ -3,7 +3,7 @@
 #include "keymap_helpers.h"
 #include "tap_dance.h"
 
-static tap xtap_state = { .is_press_action = true, .state = 0 };
+static my_tap_t xtap_state = { .is_press_action = true, .state = 0 };
 
 int cur_dance(tap_dance_state_t *state)
 {
@@ -107,8 +107,8 @@ void td_curly_bracketd_reset(tap_dance_state_t *state, void *user_data)
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for W, twice for switch to swedish layer
-    [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, Swe),
-    [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, Base),
+    [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_SWE),
+    [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_BASE),
     [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
     [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
     [TD_PARENTESES] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_PARENTESES]),

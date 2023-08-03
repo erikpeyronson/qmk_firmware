@@ -43,12 +43,12 @@
       "KC_DOT",
       "KC_SLSH",
       "KC_NO",
-      "ANY(MY_LT(Nav,KC_BSPC))",
-      "ANY(MY_LT(Sym,KC_BSPC))",
-      "ANY(MY_LT(Num,KC_DEL))",
-      "ANY(MY_LT(Num,KC_ENT))",
-      "ANY(MY_LT(Sym,KC_SPC))",
-      "ANY(MY_LT(Nav, KC_SPC))"
+      "ANY(MY_LT(LAYER_NAV,KC_BSPC))",
+      "ANY(MY_LT(LAYER_SYM,KC_BSPC))",
+      "ANY(MY_LT(LAYER_NUM,KC_DEL))",
+      "ANY(MY_LT(LAYER_NUM,KC_ENT))",
+      "ANY(MY_LT(LAYER_SYM,KC_SPC))",
+      "ANY(MY_LT(LAYER_NAV, KC_SPC))"
     ],
     [
       "KC_TRNS",
@@ -136,7 +136,7 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "ANY(MY_LT(Nav, KC_0))"
+      "ANY(MY_LT(LAYER_NAV, KC_0))"
     ],
     [
       "KC_TILD",
@@ -219,12 +219,12 @@
       "KC_END",
       "KC_NO",
       "KC_NO",
-      "ANY(MY_LT(Etc, KC_NO))",
+      "ANY(MY_LT(LAYER_ETC, KC_NO))",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "ANY(MY_LT(Etc, KC_NO))"
+      "ANY(MY_LT(LAYER_ETC, KC_NO))"
     ],
     [
       "QK_BOOT",

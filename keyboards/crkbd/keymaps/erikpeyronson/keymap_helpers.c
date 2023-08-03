@@ -6,19 +6,18 @@
 static const char PROGMEM code_to_name[60] = { ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' ' };
 
 const char* layer_strings[] = {
-  [Base] = "Base",
-  [Swe] = "Swe" ,
-  [Num] = "Num" ,
-  [Sym] = "Sym" ,
-  [Nav] = "Nav" ,
-  [Etc] = "Etc"
+  [LAYER_BASE] = "Base",
+  [LAYER_SWE] = "Swe" ,
+  [LAYER_NUM] = "Num" ,
+  [LAYER_SYM] = "Sym" ,
+  [LAYER_NAV] = "Nav" ,
+  [LAYER_ETC] = "Etc"
 };
 
 
-const char* layer_to_string(Layer layer) {
+const char* layer_to_string(layer_t layer) {
   return layer_strings[layer];
 }
-
 
 char keycode_to_char(uint16_t keycode, keyrecord_t *record)
 {

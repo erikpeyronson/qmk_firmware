@@ -2,7 +2,7 @@
 
 #include "quantum.h"
 
-typedef enum
+enum
 {
   TD_CURLY_BRACKETS = 0,
   TD_SQUARE_BRACKETS,
@@ -10,19 +10,19 @@ typedef enum
   TD_LTGT,
   TD_SWE,
   TD_BASE
-} TapDanceActions;
+};
 
 typedef enum
 {
-  Base = 0,
-  Swe,
-  Num,
-  Sym,
-  Nav,
-  Etc,
+  LAYER_BASE = 0,
+  LAYER_SWE,
+  LAYER_NUM,
+  LAYER_SYM,
+  LAYER_NAV,
+  LAYER_ETC,
   // Not an actual layer, used to end loop conditions and has to be last
-  End
-} Layer;
+  LAYER_END
+} layer_t;
 
 #define RGB_KEYCODE_OFFSET SAFE_RANGE
 #define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
@@ -33,7 +33,7 @@ typedef struct
 {
   bool is_press_action;
   int  state;
-} tap;
+} my_tap_t;
 
 enum
 {

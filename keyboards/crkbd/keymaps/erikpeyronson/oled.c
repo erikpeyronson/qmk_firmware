@@ -115,7 +115,7 @@ static void oled_render_layers(void)
 
   oled_write_P(PSTR("LAYER"), false);
   oled_write_P(PSTR("-----"), false);
-  for (Layer layer = Base; layer < End; ++layer)
+  for (layer_t layer = LAYER_BASE; layer < LAYER_END; ++layer)
     {
       oled_render_selection(layer_to_string(layer), (current_layer == layer));
     }
