@@ -2,11 +2,6 @@
 
 #include "common.h"
 
-enum RgbKeyCodes
-{
-  MY_CYCLE_RGB_MODE = RGB_KEYCODE_OFFSET
-};
-
 typedef enum _RgbMode
 {
   EACH_KEY = 0,

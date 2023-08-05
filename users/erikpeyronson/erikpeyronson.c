@@ -1,25 +1,15 @@
-#include "keymap_helpers.h"
-#include "tap_dance.h"
+#include "erikpeyronson.h"
 
 #define IS_KC_SHIFTED_SYMBOL(code) (keycode >> 8 & 0x02)
 
 static const char PROGMEM code_to_name[60] = { ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' ' };
 
-const char* layer_strings[] = {
-  [LAYER_BASE] = "Base",
-  [LAYER_SWE] = "Swe" ,
-  [LAYER_NUM] = "Num" ,
-  [LAYER_SYM] = "Sym" ,
-  [LAYER_NAV] = "Nav" ,
-  [LAYER_ETC] = "Etc"
-};
-
-
-const char* layer_to_string(layer_t layer) {
+__attribute__((weak)) const char *layer_to_string(uint8_t layer)
+{
   return layer_strings[layer];
 }
 
-char keycode_to_char(uint16_t keycode, keyrecord_t *record)
+__attribute__((weak)) char keycode_to_char(uint16_t keycode, keyrecord_t *record)
 {
   if (MY_IS_QK_TAP_DANCE(keycode))
     {
@@ -126,7 +116,7 @@ char keycode_to_char(uint16_t keycode, keyrecord_t *record)
   return pgm_read_byte(&code_to_name[keycode]);
 }
 
-int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos)
+__attribute__((weak)) int8_t get_layer_with_key(uint8_t layer, const keypos_t keypos)
 {
   uint16_t kc = keymap_key_to_keycode(layer, keypos);
 

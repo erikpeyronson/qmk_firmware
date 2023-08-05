@@ -5,7 +5,7 @@
 #include "rgb_matrix.h"
 #include "common.h"
 #include "transactions.h"
-#include "keymap_helpers.h"
+#include "erikpeyronson.h"
 // clang-format on
 
 RgbMode current_mode = EACH_KEY;

@@ -1,10 +1,11 @@
+#ifdef OLED_ENABLE
 #include "quantum.h"
 #include "logo.h"
 #include "oled_driver.h"
 #include "print.h"
 
 #include "common.h"
-#include "keymap_helpers.h"
+#include "erikpeyronson.h"
 
 #include <ctype.h>
 
@@ -82,7 +83,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation)
   return rotation;
 }
 
-static void oled_write_captalized(const char *str, bool invert)
+static void my_oled_write_captalized(const char *str, bool invert)
 {
   for (uint8_t i = 0; i < strlen(str); ++i)
     {
@@ -90,12 +91,12 @@ static void oled_write_captalized(const char *str, bool invert)
     }
 }
 
-static void oled_render_selection(const char *str, bool is_active)
+static void my_oled_render_selection(const char *str, bool is_active)
 {
   if (is_active)
     {
       oled_write_char('*', false);
-      oled_write_captalized(str, false);
+      my_oled_write_captalized(str, false);
     }
   else
     {
@@ -109,7 +110,7 @@ static void oled_render_selection(const char *str, bool is_active)
     }
 }
 
-static void oled_render_layers(void)
+static void my_oled_render_layers(void)
 {
   uint8_t current_layer = get_highest_layer(layer_state);
 
@@ -117,20 +118,20 @@ static void oled_render_layers(void)
   oled_write_P(PSTR("-----"), false);
   for (layer_t layer = LAYER_BASE; layer < LAYER_END; ++layer)
     {
-      oled_render_selection(layer_to_string(layer), (current_layer == layer));
+      my_oled_render_selection(layer_to_string(layer), (current_layer == layer));
     }
 }
 
-static void oled_render_locks(void)
+static void my_oled_render_locks(void)
 {
   led_t led_config = host_keyboard_led_state();
 
   oled_write_P(PSTR("LOCKS"), false);
   oled_write_P(PSTR("-----"), false);
-  oled_render_selection("Word", is_caps_word_on());
-  oled_render_selection("Caps", led_config.caps_lock);
-  oled_render_selection("Scrl", led_config.num_lock);
-  oled_render_selection("Num", led_config.num_lock);
+  my_oled_render_selection("Word", is_caps_word_on());
+  my_oled_render_selection("Caps", led_config.caps_lock);
+  my_oled_render_selection("Scrl", led_config.num_lock);
+  my_oled_render_selection("Num", led_config.num_lock);
 }
 
 void my_oled_render_info(void)
@@ -138,11 +139,11 @@ void my_oled_render_info(void)
   // oled_render();
   if (is_keyboard_master())
     {
-      oled_render_layers();
+      my_oled_render_layers();
     }
   else
     {
-      oled_render_locks();
+      my_oled_render_locks();
       oled_advance_page(false);
     }
 
@@ -154,7 +155,7 @@ static uint8_t brigtness = 0;
 
 static bool screen_saver_on = false;
 
-void oled_render_logo(void) {
+static void my_oled_render_logo(void) {
       oled_write_raw_P(raw_logo, sizeof(raw_logo));
       oled_scroll_left();
 }
@@ -185,8 +186,9 @@ bool oled_task_user(void)
     {
       my_oled_render_info();
     } else {
-      oled_render_logo();
+      my_oled_render_logo();
     }
 
   return false;
 }
+#endif

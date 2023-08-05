@@ -8,7 +8,7 @@
 #define MY_IS_QK_TAP_DANCE(code) ((keycode & 0xFF00) == (QK_TAP_DANCE & 0xFF00))
 
 char        keycode_to_char(uint16_t keycode, keyrecord_t *record);
-const char *layer_to_string(layer_t layer);
+const char *layer_to_string(uint8_t layer);
 int8_t      get_layer_with_key(uint8_t layer, const keypos_t keypos);
 
 typedef struct
@@ -19,5 +19,6 @@ typedef struct
 } bracket_info_t;
 
 extern bracket_info_t brackets[4];
+extern const char* layer_strings[];
 
 #endif // !KEYMAP_HELPERS_H

@@ -10,10 +10,33 @@
 #include "common.h"
 
 #include "oled.h"
-#include "keymap_helpers.h"
+#include "erikpeyronson.h"
 #include "tap_dance.h"
 
 #include "keymap_out.h"
+
+
+// clang-format off
+tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for W, twice for switch to swedish layer
+    [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_SWE),
+    [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_BASE),
+    [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
+    [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
+    [TD_PARENTESES] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_PARENTESES]),
+    [TD_LTGT] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_LTGT]),
+};
+// clang-format on
+
+const char* layer_strings[]
+ = {
+  [LAYER_BASE] = "Base",
+  [LAYER_SWE] = "Swe" ,
+  [LAYER_NUM] = "Num" ,
+  [LAYER_SYM] = "Sym" ,
+  [LAYER_NAV] = "Nav" ,
+  [LAYER_ETC] = "Etc"
+};
 
 void keyboard_post_init_user(void)
 {
@@ -70,14 +93,14 @@ void housekeeping_task_user(void)
   static RgbMode old_rgb_mode;
   uint32_t idle_time = last_input_activity_elapsed();
 
-  if (!is_idle && idle_time > OLED_SCREENSAVER_TIMEOUT)
+  if (!is_idle && idle_time > MY_OLED_SCREENSAVER_TIMEOUT)
     {
       old_rgb_mode = my_rgb_get_mode();
       my_rgb_set_mode(OFF);
       my_oled_screensaver(true);
       is_idle = true;
     }
-  else if (is_idle && idle_time < OLED_SCREENSAVER_TIMEOUT)
+  else if (is_idle && idle_time < MY_OLED_SCREENSAVER_TIMEOUT)
     {
       my_oled_screensaver(false);
       my_rgb_set_mode(old_rgb_mode);

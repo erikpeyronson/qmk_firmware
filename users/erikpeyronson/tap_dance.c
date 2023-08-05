@@ -1,11 +1,23 @@
 #include "quantum.h"
 #include "process_tap_dance.h"
-#include "keymap_helpers.h"
+#include "erikpeyronson.h"
 #include "tap_dance.h"
+
+enum
+{
+  SINGLE_TAP        = 1,
+  SINGLE_HOLD       = 2,
+  DOUBLE_TAP        = 3,
+  DOUBLE_HOLD       = 4,
+  DOUBLE_SINGLE_TAP = 5, // send two single taps
+  TRIPLE_TAP        = 6,
+  TRIPLE_HOLD       = 7
+};
+
 
 static my_tap_t xtap_state = { .is_press_action = true, .state = 0 };
 
-int my_td_current_dance(tap_dance_state_t *state)
+static int my_td_current_dance(tap_dance_state_t *state)
 {
   if (state->count == 1)
     {
@@ -102,16 +114,3 @@ void my_td_brackets_reset(tap_dance_state_t *state, void *user_data)
     }
   xtap_state.state = 0;
 }
-
-// clang-format off
-// Tap Dance definitions
-tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for W, twice for switch to swedish layer
-    [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_SWE),
-    [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_BASE),
-    [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
-    [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
-    [TD_PARENTESES] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_PARENTESES]),
-    [TD_LTGT] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_LTGT]),
-};
-// clang-format on

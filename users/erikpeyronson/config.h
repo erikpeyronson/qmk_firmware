@@ -1,0 +1,15 @@
+#ifndef MATRIX_COLS
+#    define MATRIX_COLS 6
+#endif // MATRIX_COLS
+
+#ifndef MATRIX_ROWS
+#    define MATRIX_ROWS 8
+#endif // MATRIX_ROWS
+
+#ifndef MY_RGB_KEYCODE_OFFSET
+#define MY_RGB_KEYCODE_OFFSET SAFE_RANGE
+#endif
+
+#ifndef TAP_DANCE_KEYCODE_OFFSET
+#define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
+#endif
