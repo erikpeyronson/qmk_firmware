@@ -83,7 +83,7 @@ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, VS_BM_CLEARALL,                    
                                         KC_TRNS,  VS_DEL_LEFT, VS_DEL_RIGHT,                VS_DEL_LINE, VS_JUMPY, VS_COMMANDS
                                       //`--------------------------'            `--------------------------'
   ),
-
+  
   [COMBINED] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
     KC_TILD,   KC_EXLM, KC_AT,   KC_HASH, KC_DLR, KC_PERC,                        KC_PLUS,   KC_7,  KC_8,   KC_9,  KC_ASTR,  KC_PIPE,
@@ -149,7 +149,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   // return rotation;
   return OLED_ROTATION_180;
 }
-
+  
 
 #define DISPLAY_LAYER_NAME(LAYER_NAME, LAYER_STRING) \
   if(get_highest_layer(layer_state) == LAYER_NAME) { \
@@ -213,7 +213,7 @@ const rgblight_segment_t PROGMEM rgb_layer_pink[] = RGBLIGHT_LAYER_SEGMENTS(
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     rgb_layer_off,
     rgb_layer_blue,
-    rgb_layer_purplep
+    rgb_layer_purple,
     rgb_layer_red,
     rgb_layer_orange,
     rgb_layer_yellow,
@@ -235,16 +235,16 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 
     rgblight_set_layer_state(1, layer_state_cmp(state, KEYNAV));
-    rgblight_set_layer_state(2, layer_state_cmp(state, KEYSEL));
+    rgblight_set_layer_state(2, layer_state_cmp(state, KEYSEL));    
 
-
-    rgblight_set_layer_state(3, layer_state_cmp(state, SHELL_NAV));
+    
+    rgblight_set_layer_state(3, layer_state_cmp(state, SHELL_NAV));    
     rgblight_set_layer_state(4, layer_state_cmp(state, SHELL_SCREEN));
-
+    
     rgblight_set_layer_state(5, layer_state_cmp(state, SHORTCUTS));
-
+    
     rgblight_set_layer_state(6, layer_state_cmp(state, VSCODE));
-
+    
     return state;
 }
 
