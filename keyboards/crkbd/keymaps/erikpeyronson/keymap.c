@@ -44,7 +44,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         {
           if (record->event.pressed)
             {
-              my_next_rgb_mode();
+              my_rgb_next_mode();
             }
           else
             {
@@ -72,15 +72,15 @@ void housekeeping_task_user(void)
 
   if (!is_idle && idle_time > OLED_SCREENSAVER_TIMEOUT)
     {
-      old_rgb_mode = get_rgb_mode();
-      set_rgb_mode(OFF);
-      oled_screen_saver(true);
+      old_rgb_mode = my_rgb_get_mode();
+      my_rgb_set_mode(OFF);
+      my_oled_screensaver(true);
       is_idle = true;
     }
   else if (is_idle && idle_time < OLED_SCREENSAVER_TIMEOUT)
     {
-      oled_screen_saver(false);
-      set_rgb_mode(old_rgb_mode);
+      my_oled_screensaver(false);
+      my_rgb_set_mode(old_rgb_mode);
       is_idle = false;
     }
 }

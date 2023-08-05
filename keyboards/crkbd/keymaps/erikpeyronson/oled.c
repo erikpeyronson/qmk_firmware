@@ -133,9 +133,9 @@ static void oled_render_locks(void)
   oled_render_selection("Num", led_config.num_lock);
 }
 
-void oled_render_info(void)
+void my_oled_render_info(void)
 {
-  oled_render();
+  // oled_render();
   if (is_keyboard_master())
     {
       oled_render_layers();
@@ -159,11 +159,8 @@ void oled_render_logo(void) {
       oled_scroll_left();
 }
 
-bool oled_screen_saver(bool turn_on)
+void my_oled_screensaver(bool turn_on)
 {
-  if (screen_saver_on == turn_on) {
-    return screen_saver_on;
-  }
   if (!screen_saver_on && turn_on)
     {
       oled_clear();
@@ -180,15 +177,13 @@ bool oled_screen_saver(bool turn_on)
       oled_scroll_off();
       oled_set_brightness(brigtness);
     }
-
-    return screen_saver_on;
 }
 
 bool oled_task_user(void)
 {
   if (!screen_saver_on)
     {
-      oled_render_info();
+      my_oled_render_info();
     } else {
       oled_render_logo();
     }

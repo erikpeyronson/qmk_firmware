@@ -21,27 +21,27 @@ typedef struct _my_state_t
 } my_state_t;
 
 #ifdef RGB_MATRIX_ENABLE
-void my_rgb_init(void);
+void    my_rgb_init(void);
+void    my_rgb_set_mode(RgbMode mode);
+RgbMode my_rgb_get_mode(void);
+void    my_rgb_next_mode(void);
+void    my_rgb_sync_state(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data);
 
-void    set_rgb_mode(RgbMode mode);
-RgbMode get_rgb_mode(void);
-void    my_next_rgb_mode(void);
-void    sync_rgb_mode(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data);
 #else
 void my_rgb_init(void)
 {
 }
-void set_rgb_mode(RgbMode mode)
+void my_rgb_set_mode(RgbMode mode)
 {
 }
-void my_next_rgb_mode(void)
+RgbMode my_rgb_get_mode(void)
 {
-}
-void sync_rgb_mode(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data)
-{
-}
-
-RgbMode get_rgb_mode(void) {
   return OFF;
+}
+void my_rgb_next_mode(void)
+{
+}
+void my_rgb_sync_state(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data)
+{
 }
 #endif

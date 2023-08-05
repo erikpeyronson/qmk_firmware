@@ -5,7 +5,7 @@
 
 static my_tap_t xtap_state = { .is_press_action = true, .state = 0 };
 
-int cur_dance(tap_dance_state_t *state)
+int my_td_current_dance(tap_dance_state_t *state)
 {
   if (state->count == 1)
     {
@@ -43,11 +43,11 @@ int cur_dance(tap_dance_state_t *state)
     return 8; // magic number. At some point this method will expand to work for more presses
 }
 
-void td_curly_bracked_finished(tap_dance_state_t *state, void *user_data)
+void my_td_brackets_finished(tap_dance_state_t *state, void *user_data)
 {
   bracket_info_t *bracket_info = (bracket_info_t *)user_data;
 
-  xtap_state.state = cur_dance(state);
+  xtap_state.state = my_td_current_dance(state);
   switch (xtap_state.state)
     {
       case SINGLE_TAP:
@@ -77,7 +77,7 @@ void td_curly_bracked_finished(tap_dance_state_t *state, void *user_data)
     }
 }
 
-void td_curly_bracketd_reset(tap_dance_state_t *state, void *user_data)
+void my_td_brackets_reset(tap_dance_state_t *state, void *user_data)
 {
   bracket_info_t *bracket_info = (bracket_info_t *)user_data;
   switch (xtap_state.state)
@@ -109,9 +109,9 @@ tap_dance_action_t tap_dance_actions[] = {
     // Tap once for W, twice for switch to swedish layer
     [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_SWE),
     [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_BASE),
-    [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
-    [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
-    [TD_PARENTESES] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_PARENTESES]),
-    [TD_LTGT] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_curly_bracked_finished, td_curly_bracketd_reset, (void *)&brackets[TD_LTGT]),
+    [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
+    [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
+    [TD_PARENTESES] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_PARENTESES]),
+    [TD_LTGT] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_LTGT]),
 };
 // clang-format on

@@ -117,6 +117,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #undef OLED_FONT_H
 #define OLED_FONT_H "keyboards/crkbd/keymaps/erikpeyronson/glcdfont.c"
-#define OLED_TIMEOUT 0
+#define OLED_TIMEOUT 120000
 #define OLED_SCREENSAVER_TIMEOUT 10000
 #define OLED_SCREENSAVER_BRIGHTNESS 1

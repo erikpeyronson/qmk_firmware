@@ -27,7 +27,7 @@ void my_rgb_init(void)
   // Turn all leds off during startup
   rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
   rgb_matrix_sethsv_noeeprom(HSV_OFF);
-  transaction_register_rpc(SYNC_RGB_MODE, sync_rgb_mode);
+  transaction_register_rpc(SYNC_RGB_MODE, my_rgb_sync_state);
 }
 
 // clang-format off
@@ -186,16 +186,16 @@ bool rgb_matrix_indicators_user()
   return false;
 }
 
-void set_rgb_mode(RgbMode mode)
+void my_rgb_set_mode(RgbMode mode)
 {
   current_mode = mode;
 }
-RgbMode get_rgb_mode(void)
+RgbMode my_rgb_get_mode(void)
 {
   return current_mode;
 }
 
-void my_next_rgb_mode(void)
+void my_rgb_next_mode(void)
 {
   if (current_mode++ >= OFF)
     {
@@ -205,7 +205,7 @@ void my_next_rgb_mode(void)
   transaction_rpc_exec(SYNC_RGB_MODE, sizeof(m2s), &m2s, 0, NULL);
 }
 
-void sync_rgb_mode(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data)
+void my_rgb_sync_state(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data)
 {
   const rgb_state_t *m2s = (const rgb_state_t *)in_data;
   current_mode           = m2s->rgb_mode;
