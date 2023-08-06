@@ -4,9 +4,19 @@
 #include "quantum.h"
 #include "common.h"
 
+#ifdef OLED_ENABLE
+#include "oled.h"
+#endif
+
+#ifdef RGB_MATRIX_ENABLE
+#include "rgb.h"
+#endif
+
+// custom macros
 #define IS_KC_SHIFTED_SYMBOL(code) (keycode >> 8 & 0x02)
 #define MY_IS_QK_TAP_DANCE(code) ((keycode & 0xFF00) == (QK_TAP_DANCE & 0xFF00))
 
+// Custom helper functions used by rgb/oled. Can be overridden in keymap
 char        keycode_to_char(uint16_t keycode, keyrecord_t *record);
 const char *layer_to_string(uint8_t layer);
 int8_t      get_layer_with_key(uint8_t layer, const keypos_t keypos);

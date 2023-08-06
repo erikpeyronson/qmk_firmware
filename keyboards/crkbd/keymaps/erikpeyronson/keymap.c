@@ -1,9 +1,6 @@
 #include QMK_KEYBOARD_H
 
-#include "keyboard.h"
-#include "oled.h"
 #include "quantum.h"
-#include "transactions.h"
 
 #include "rgb.h"
 #include "logo.h"
