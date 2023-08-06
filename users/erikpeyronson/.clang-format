@@ -1,19 +1,20 @@
 ---
 BasedOnStyle: GNU
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: false
 AlignConsecutiveAssignments: 'true'
 AlignConsecutiveDeclarations: 'true'
 AlignOperands: 'true'
 AllowAllParametersOfDeclarationOnNextLine: 'false'
 AllowShortCaseLabelsOnASingleLine: 'false'
-AllowShortFunctionsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: 'true'
 AllowShortLoopsOnASingleLine: 'false'
+AllowShortIfStatementsOnASingleLine: 'true'
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: 'false'
 BinPackArguments: 'true'
 BinPackParameters: 'true'
-ColumnLimit: '1000'
+ColumnLimit: '100'
 IndentCaseLabels: 'true'
 IndentPPDirectives: AfterHash
 IndentWidth: '2'
@@ -26,6 +27,8 @@ SpaceInEmptyParentheses: 'false'
 SpacesBeforeTrailingComments: 1
 TabWidth: '4'
 UseTab: Never
-AllowShortEnumsOnASingleLine: false
+AllowShortEnumsOnASingleLine: 'false'
+Cpp11BracedListStyle: 'true'
+BreakArrays: 'true'
 
 ...

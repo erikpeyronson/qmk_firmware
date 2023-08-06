@@ -75,7 +75,7 @@ void each_key(void)
     {
       for (int col = 0; col < 6; ++col)
         {
-          keypos_t    current_key = { .col = col, .row = row };
+          keypos_t    current_key = {.col = col, .row = row};
           uint8_t     led_index   = g_led_config.matrix_co[row][col];
           uint8_t     layer       = get_layer_with_key(current_layer, current_key);
           rgb_color_t rgb         = get_color(layer);
@@ -106,7 +106,7 @@ void thumbs_only(void)
 
   for (uint8_t col = first_column; col < last_column + 1; ++col)
     {
-      keypos_t    current_key = { .col = col, .row = row };
+      keypos_t    current_key = {.col = col, .row = row};
       rgb_color_t rgb;
 
       uint8_t led_index = g_led_config.matrix_co[row][col];
@@ -121,7 +121,7 @@ void thumbs_only(void)
         }
       else if (current_layer == LAYER_SWE && is_keyboard_left())
         {
-          rgb = (rgb_color_t){ RGB_BLUE };
+          rgb = (rgb_color_t){RGB_BLUE};
         }
       else
         {
@@ -153,7 +153,7 @@ void thumbs_solid(void)
   rgb_color_t rgb;
   if (current_layer == LAYER_SWE && is_keyboard_left())
     {
-      rgb = (rgb_color_t){ RGB_BLUE };
+      rgb = (rgb_color_t){RGB_BLUE};
     }
   else
     {
@@ -186,14 +186,8 @@ bool rgb_matrix_indicators_user()
   return false;
 }
 
-void my_rgb_set_mode(RgbMode mode)
-{
-  current_mode = mode;
-}
-RgbMode my_rgb_get_mode(void)
-{
-  return current_mode;
-}
+void    my_rgb_set_mode(RgbMode mode) { current_mode = mode; }
+RgbMode my_rgb_get_mode(void) { return current_mode; }
 
 void my_rgb_next_mode(void)
 {
@@ -201,7 +195,7 @@ void my_rgb_next_mode(void)
     {
       current_mode = 0;
     }
-  rgb_state_t m2s = { current_mode };
+  rgb_state_t m2s = {current_mode};
   transaction_rpc_exec(SYNC_RGB_MODE, sizeof(m2s), &m2s, 0, NULL);
 }
 
@@ -209,6 +203,26 @@ void my_rgb_sync_state(uint8_t in_buflen, const void *in_data, uint8_t out_bufle
 {
   const rgb_state_t *m2s = (const rgb_state_t *)in_data;
   current_mode           = m2s->rgb_mode;
+}
+
+bool my_rgb_process_record(uint16_t keycode, keyrecord_t *record)
+{
+  switch (keycode)
+    {
+      case MY_CYCLE_RGB_MODE:
+        {
+          if (record->event.pressed)
+            {
+              my_rgb_next_mode();
+            }
+          else
+            {
+              // Do something else when release
+              return false; // Skip all further processing of this key
+            }
+        }
+    }
+  return true;
 }
 
 #endif

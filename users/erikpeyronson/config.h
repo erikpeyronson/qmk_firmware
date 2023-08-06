@@ -1,9 +1,9 @@
 #ifndef MATRIX_COLS
-#    define MATRIX_COLS 6
+#define MATRIX_COLS 6
 #endif // MATRIX_COLS
 
 #ifndef MATRIX_ROWS
-#    define MATRIX_ROWS 8
+#define MATRIX_ROWS 8
 #endif // MATRIX_ROWS
 
 #ifndef MY_RGB_KEYCODE_OFFSET

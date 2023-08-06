@@ -15,7 +15,6 @@
 
 #include "keymap_out.h"
 
-
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for W, twice for switch to swedish layer
@@ -28,14 +27,13 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 // clang-format on
 
-const char* layer_strings[]
- = {
-  [LAYER_BASE] = "Base",
-  [LAYER_SWE] = "Swe" ,
-  [LAYER_NUM] = "Num" ,
-  [LAYER_SYM] = "Sym" ,
-  [LAYER_NAV] = "Nav" ,
-  [LAYER_ETC] = "Etc"
+const char *layer_strings[] = {
+    [LAYER_BASE] = "Base",
+    [LAYER_SWE]  = "Swe",
+    [LAYER_NUM]  = "Num",
+    [LAYER_SYM]  = "Sym",
+    [LAYER_NAV]  = "Nav",
+    [LAYER_ETC]  = "Etc",
 };
 
 void keyboard_post_init_user(void)
@@ -55,28 +53,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
   // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
 
-  uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+  uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n\n",
+      keycode, record->event.key.col, record->event.key.row, record->event.pressed,
+      record->event.time, record->tap.interrupted, record->tap.count);
 
   uprintf("Character reprentation: %c \n\n", keycode_to_char(keycode, NULL));
 #endif
 
-  switch (keycode)
-    {
-#ifdef RGB_MATRIX_ENABLE
-      case MY_CYCLE_RGB_MODE:
-        {
-          if (record->event.pressed)
-            {
-              my_rgb_next_mode();
-            }
-          else
-            {
-              // Do something else when release
-              return false; // Skip all further processing of this key
-            }
-        }
-#endif
-    }
+  if (!my_rgb_process_record(keycode, record)) return false;
   return true;
 }
 
@@ -86,12 +70,12 @@ layer_state_t layer_state_set_user(layer_state_t state)
   return state;
 }
 
-static bool is_idle  = false;
+static bool is_idle = false;
 
 void housekeeping_task_user(void)
 {
   static RgbMode old_rgb_mode;
-  uint32_t idle_time = last_input_activity_elapsed();
+  uint32_t       idle_time = last_input_activity_elapsed();
 
   if (!is_idle && idle_time > MY_OLED_SCREENSAVER_TIMEOUT)
     {

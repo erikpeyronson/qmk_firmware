@@ -19,6 +19,6 @@ typedef struct
 } bracket_info_t;
 
 extern bracket_info_t brackets[4];
-extern const char* layer_strings[];
+extern const char    *layer_strings[];
 
 #endif // !KEYMAP_HELPERS_H
