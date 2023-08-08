@@ -15,7 +15,7 @@
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for W, twice for switch to swedish layer
-    [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_SWE),
+    [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_MINUS, LAYER_SWE),
     [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_BASE),
     [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
     [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
@@ -26,6 +26,7 @@ tap_dance_action_t tap_dance_actions[] = {
 
 const char *layer_strings[] = {
     [LAYER_BASE] = "Base",
+    [LAYER_OSM]  = "Osm",
     [LAYER_SWE]  = "Swe",
     [LAYER_NUM]  = "Num",
     [LAYER_SYM]  = "Sym",

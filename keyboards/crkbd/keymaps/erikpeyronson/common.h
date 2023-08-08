@@ -5,6 +5,7 @@
 typedef enum
 {
   LAYER_BASE = 0,
+  LAYER_OSM,
   LAYER_SWE,
   LAYER_NUM,
   LAYER_SYM,

@@ -136,7 +136,7 @@ static void my_oled_render_locks(void)
 
 void my_oled_render_info(void)
 {
-  if (is_keyboard_master())
+  if (!is_keyboard_master())
     {
       my_oled_render_locks();
       oled_advance_page(false);
