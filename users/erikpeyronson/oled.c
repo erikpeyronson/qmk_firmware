@@ -137,7 +137,6 @@ static void my_oled_render_locks(void)
 
 void my_oled_render_info(void)
 {
-  // oled_render();
   if (is_keyboard_master())
     {
       my_oled_render_layers();
