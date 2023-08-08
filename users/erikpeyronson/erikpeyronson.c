@@ -2,10 +2,9 @@
 
 #define IS_KC_SHIFTED_SYMBOL(code) (keycode >> 8 & 0x02)
 
-static const char PROGMEM code_to_name[60] = {' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']',
-    '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
+static const char PROGMEM code_to_name[60] = {' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8',
+    '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
 
 __attribute__((weak)) const char *layer_to_string(uint8_t layer) { return layer_strings[layer]; }
 
@@ -83,8 +82,7 @@ __attribute__((weak)) char keycode_to_char(uint16_t keycode, keyrecord_t *record
   if (IS_QK_ONE_SHOT_MOD(keycode))
     {
       println("one shot mod");
-      keycode = 0xE0 + biton(QK_ONE_SHOT_MOD_GET_MODS(keycode) & 0xF)
-                + biton(QK_ONE_SHOT_MOD_GET_MODS(keycode) & 0x10);
+      keycode = 0xE0 + biton(QK_ONE_SHOT_MOD_GET_MODS(keycode) & 0xF) + biton(QK_ONE_SHOT_MOD_GET_MODS(keycode) & 0x10);
     }
 
   if (keycode == KC_TRANSPARENT)

@@ -1,15 +1,15 @@
 #ifdef OLED_ENABLE
-#  include "quantum.h"
-#  include "logo.h"
-#  include "oled_driver.h"
-#  include "print.h"
+#include "quantum.h"
+#include "logo.h"
+#include "oled_driver.h"
+#include "print.h"
 
-#  include "common.h"
-#  include "erikpeyronson.h"
+#include "common.h"
+#include "erikpeyronson.h"
 
-#  include <ctype.h>
+#include <ctype.h>
 
-#  define OLED_CHARS_PER_LINE 6
+#define OLED_CHARS_PER_LINE 6
 
 static char keymap_chars[6][3][5];
 
@@ -52,8 +52,7 @@ void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS])
                 }
               else
                 {
-                  char_to_set
-                      = &keymap_chars[layer][row - first_row][invert_offset - col - first_col];
+                  char_to_set = &keymap_chars[layer][row - first_row][invert_offset - col - first_col];
                 }
               *char_to_set = keycode_to_char(kc, NULL);
             }
@@ -175,8 +174,9 @@ void my_oled_screensaver(bool turn_on)
   else if (screen_saver_on && !turn_on)
     {
       oled_clear();
-      screen_saver_on = false;
+
       oled_scroll_off();
+      screen_saver_on = false;
       oled_set_brightness(brigtness);
     }
 }
