@@ -139,12 +139,12 @@ void my_oled_render_info(void)
 {
   if (is_keyboard_master())
     {
-      my_oled_render_layers();
+      my_oled_render_locks();
+      oled_advance_page(false);
     }
   else
     {
-      my_oled_render_locks();
-      oled_advance_page(false);
+      my_oled_render_layers();
     }
 
   oled_advance_page(false);

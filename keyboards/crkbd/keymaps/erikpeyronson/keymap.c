@@ -35,7 +35,7 @@ const char *layer_strings[] = {
 
 void keyboard_post_init_user(void)
 {
-  // Customise these values to desired behaviourno
+  // Customise these values to desired behaviour
   debug_enable   = false;
   debug_matrix   = false;
   debug_keyboard = false;

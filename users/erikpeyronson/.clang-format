@@ -16,7 +16,7 @@ BinPackArguments: 'true'
 BinPackParameters: 'true'
 ColumnLimit: '120'
 IndentCaseLabels: 'true'
-IndentPPDirectives: AfterHash
+IndentPPDirectives: 'None'
 IndentWidth: '2'
 MaxEmptyLinesToKeep: '1'
 PointerAlignment: Right
@@ -31,4 +31,4 @@ AllowShortEnumsOnASingleLine: 'false'
 Cpp11BracedListStyle: 'true'
 BreakArrays: 'true'
 
-...
+
