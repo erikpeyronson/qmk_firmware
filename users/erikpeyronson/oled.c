@@ -91,8 +91,9 @@ static void my_oled_write_captalized(const char *str, bool invert)
     }
 }
 
-static void my_oled_render_selection(const char *str, bool is_active)
+static void my_oled_render_selection(const char *str, bool is_active, bool is_oneshot_active)
 {
+  (void)is_oneshot_active;
   if (is_active)
     {
       oled_write_char('*', false);
@@ -118,7 +119,7 @@ static void my_oled_render_layers(void)
   oled_write_P(PSTR("-----"), false);
   for (layer_t layer = LAYER_BASE; layer < LAYER_END; ++layer)
     {
-      my_oled_render_selection(layer_to_string(layer), (current_layer == layer));
+      my_oled_render_selection(layer_to_string(layer), (current_layer == layer), false);
     }
 }
 
@@ -128,10 +129,10 @@ static void my_oled_render_locks(void)
 
   oled_write_P(PSTR("LOCKS"), false);
   oled_write_P(PSTR("-----"), false);
-  my_oled_render_selection("Word", is_caps_word_on());
-  my_oled_render_selection("Caps", led_config.caps_lock);
-  my_oled_render_selection("Scrl", led_config.num_lock);
-  my_oled_render_selection("Num", led_config.num_lock);
+  my_oled_render_selection("Word", is_caps_word_on(), false);
+  my_oled_render_selection("Caps", led_config.caps_lock, false);
+  my_oled_render_selection("Scrl", led_config.num_lock, false);
+  my_oled_render_selection("Num", led_config.num_lock, false);
 }
 
 void my_oled_render_info(void)
@@ -194,4 +195,11 @@ bool oled_task_user(void)
 
   return false;
 }
+
+static uint8_t active_osms = 0;
+
+void my_oled_osm_changed(uint8_t mods) {
+  active_osms = mods;
+}
+
 #endif
