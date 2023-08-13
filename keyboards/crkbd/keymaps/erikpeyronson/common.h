@@ -5,8 +5,8 @@
 typedef enum
 {
   LAYER_BASE = 0,
-  LAYER_OSM,
   LAYER_SWE,
+  LAYER_OSM,
   LAYER_NUM,
   LAYER_SYM,
   LAYER_NAV,
@@ -28,7 +28,8 @@ enum
   TD_PARENTESES,
   TD_LTGT,
   TD_SWE,
-  TD_BASE
+  TD_BASE,
+  TD_BASE_TILDE
 };
 
 #define MY_LT(layer, kc) LT(layer, kc)

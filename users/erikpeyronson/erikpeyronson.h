@@ -16,6 +16,13 @@
 #define IS_KC_SHIFTED_SYMBOL(code) (keycode >> 8 & 0x02)
 #define MY_IS_QK_TAP_DANCE(code) ((keycode & 0xFF00) == (QK_TAP_DANCE & 0xFF00))
 
+#undef KC_COPY
+#define KC_COPY LCTL(KC_C)
+#undef KC_CUT
+#define KC_CUT LCTL(KC_X)
+#undef KC_PSTE
+#define KC_PSTE LCTL(KC_X)
+
 // Custom helper functions used by rgb/oled. Can be overridden in keymap
 char        keycode_to_char(uint16_t keycode, keyrecord_t *record);
 const char *layer_to_string(uint8_t layer);
