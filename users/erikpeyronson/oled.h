@@ -6,10 +6,10 @@
 void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS]);
 void my_oled_screensaver(bool turn_on);
 void my_oled_render_info(void);
-void my_oled_osm_changed(uint8_t);
+void my_oled_osl_changed(uint8_t);
 #else
 void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS]) {}
 void my_oled_screensaver(bool turn_on) {}
 void my_oled_render_info(void) {}
-void my_oled_osm_changed(uint8_t) {}
+void my_oled_osl_changed(uint8_t) {}
 #endif

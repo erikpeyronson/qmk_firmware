@@ -11,10 +11,14 @@
 
 #define OLED_CHARS_PER_LINE 6
 
-static char keymap_chars[6][3][5];
+#ifdef   MY_OLED_RENDER_KEYMAP_ENABLED
+static char    keymap_chars[6][3][5];
+#endif
+static uint8_t osm_state = 0;
 
 void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS])
 {
+  #ifdef MY_OLED_RENDER_KEYMAP_ENABLED
   uint8_t no_cols   = 5;
   uint8_t first_col = 1;
 
@@ -58,8 +62,10 @@ void my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS])
             }
         }
     }
+    #endif
 }
 
+#ifdef MY_OLED_RENDER_KEYMAP_ENABLED
 static void my_oled_render_keylog(void)
 {
   uint8_t current_layer = get_highest_layer(layer_state);
@@ -76,6 +82,7 @@ static void my_oled_render_keylog(void)
       oled_advance_page(true);
     }
 }
+#endif
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation)
 {
@@ -94,14 +101,26 @@ static void my_oled_write_captalized(const char *str, bool invert)
 static void my_oled_render_selection(const char *str, bool is_active, bool is_oneshot_active)
 {
   (void)is_oneshot_active;
-  if (is_active)
+  bool write_capitalized = false;
+  if (is_oneshot_active)
+    {
+      oled_write_char('-', false);
+    }
+  else if (is_active)
     {
       oled_write_char('*', false);
-      my_oled_write_captalized(str, false);
     }
   else
     {
       oled_write_char(' ', false);
+    }
+
+  if (write_capitalized)
+    {
+      my_oled_write_captalized(str, false);
+    }
+  else
+    {
       oled_write(str, false);
     }
 
@@ -117,9 +136,13 @@ static void my_oled_render_layers(void)
 
   oled_write_P(PSTR("LAYER"), false);
   oled_write_P(PSTR("-----"), false);
+
+  const bool ignore_oneshot = current_layer == LAYER_BASE;
+
   for (layer_t layer = LAYER_BASE; layer < LAYER_END; ++layer)
     {
-      my_oled_render_selection(layer_to_string(layer), (current_layer == layer), false);
+      const bool should_oneshot = !ignore_oneshot && (osm_state == layer);
+      my_oled_render_selection(layer_to_string(layer), (current_layer == layer), (should_oneshot));
     }
 }
 
@@ -127,7 +150,6 @@ static void my_oled_render_locks(void)
 {
   led_t led_config = host_keyboard_led_state();
 
-  oled_write_P(PSTR("LOCKS"), false);
   oled_write_P(PSTR("-----"), false);
   my_oled_render_selection("Word", is_caps_word_on(), false);
   my_oled_render_selection("Caps", led_config.caps_lock, false);
@@ -137,6 +159,12 @@ static void my_oled_render_locks(void)
 
 void my_oled_render_info(void)
 {
+
+  #ifndef MY_OLED_RENDER_KEYMAP_ENABLED
+  oled_advance_page(false);
+  oled_advance_page(false);
+  oled_advance_page(false);
+  #endif
   if (!is_keyboard_master())
     {
       my_oled_render_locks();
@@ -148,7 +176,9 @@ void my_oled_render_info(void)
     }
 
   oled_advance_page(false);
+  #ifdef MY_OLED_RENDER_KEYMAP_ENABLED
   my_oled_render_keylog();
+  #endif
 }
 
 static uint8_t brigtness = 0;
@@ -196,10 +226,6 @@ bool oled_task_user(void)
   return false;
 }
 
-static uint8_t active_osms = 0;
-
-void my_oled_osm_changed(uint8_t mods) {
-  active_osms = mods;
-}
+void my_oled_osl_changed(uint8_t osl) { osm_state = osl; }
 
 #endif
