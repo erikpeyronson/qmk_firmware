@@ -123,11 +123,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OLED_TIMEOUT 120000
 #define MY_OLED_SCREENSAVER_TIMEOUT 10000
 #define OLED_SCREENSAVER_BRIGHTNESS 1
-#define MY_OLED_RENDER_KEYMAP_ENABLED
+#undef MY_OLED_RENDER_KEYMAP_ENABLE
 
 
 #define MY_RGB_KEYCODE_OFFSET SAFE_RANGE
 #define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
 
-// #define ONESHOT_TAP_TOGGLE 2  /* Tapping this number of times holds the key until tapped once again. */
+#define ONESHOT_TAP_TOGGLE 2  /* Tapping this number of times holds the key until tapped once again. */
 #define ONESHOT_TIMEOUT 10000  /* Time (in ms) before the one shot key is released */
