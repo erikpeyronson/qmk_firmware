@@ -8,7 +8,7 @@
 #include "erikpeyronson.h"
 // clang-format on
 
-RgbMode current_mode = EACH_KEY;
+RgbMode current_mode = THUMBS_SOLID;
 
 typedef struct
 {
@@ -39,6 +39,7 @@ static rgb_color_t layer_colors[] = {
   [LAYER_NAV]  = { RGB_ORANGE },
   [LAYER_ETC]  = { RGB_RED    },
   [LAYER_END]  = { RGB_OFF    },
+  [LAYER_OSM]  = { RGB_PURPLE }
 };
 // clang-format on
 
@@ -119,6 +120,8 @@ void thumbs_only(void)
           uint8_t  target_layer = QK_LAYER_TAP_GET_LAYER(kc);
           rgb                   = get_color(target_layer);
         }
+      // We need to be patriots and use the colors of the swedish flag when in
+      // the swe layer
       else if (current_layer == LAYER_SWE && is_keyboard_left())
         {
           rgb = (rgb_color_t){RGB_BLUE};

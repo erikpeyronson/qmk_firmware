@@ -150,6 +150,7 @@ static void my_oled_render_locks(void)
 {
   led_t led_config = host_keyboard_led_state();
 
+  oled_write_P(PSTR("LOCKS"), false);
   oled_write_P(PSTR("-----"), false);
   my_oled_render_selection("Word", is_caps_word_on(), false);
   my_oled_render_selection("Caps", led_config.caps_lock, false);
@@ -165,7 +166,7 @@ void my_oled_render_info(void)
   oled_advance_page(false);
   oled_advance_page(false);
   #endif
-  if (!is_keyboard_master())
+  if (is_keyboard_master())
     {
       my_oled_render_locks();
       oled_advance_page(false);
