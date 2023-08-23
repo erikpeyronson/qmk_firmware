@@ -32,7 +32,7 @@ void my_rgb_init(void)
 
 // clang-format off
 static rgb_color_t layer_colors[] = {
-  [LAYER_BASE] = { RGB_WHITE  },
+  [LAYER_BASE] = { RGB_OFF  },
   [LAYER_SWE]  = { RGB_YELLOW },
   [LAYER_NUM]  = { RGB_BLUE   },
   [LAYER_SYM]  = { RGB_GREEN  },
