@@ -62,25 +62,34 @@ void my_td_brackets_finished(tap_dance_state_t *state, void *user_data)
   switch (xtap_state.state)
     {
       case SINGLE_TAP:
-        if (bracket_info->is_shifted)
-          {
-            register_code(KC_LEFT_SHIFT);
-          }
+        if (bracket_info->is_shifted) register_code(KC_LEFT_SHIFT);
         register_code(bracket_info->kc_open);
+        break;
+      case DOUBLE_TAP:
+        if (bracket_info->is_shifted) register_code(KC_LEFT_SHIFT);
+        register_code(bracket_info->kc_close);
         break;
       case SINGLE_HOLD:
         if (bracket_info->is_shifted) register_code(KC_LEFT_SHIFT);
         register_code(bracket_info->kc_open);
         register_code(bracket_info->kc_close);
 
-        if (bracket_info->is_shifted) unregister_code(KC_LEFT_SHIFT);
         unregister_code(bracket_info->kc_open);
         unregister_code(bracket_info->kc_close);
+        if (bracket_info->is_shifted) unregister_code(KC_LEFT_SHIFT);
+
         register_code(KC_LEFT);
+        unregister_code(KC_LEFT);
         break;
-      case DOUBLE_TAP:
+      case DOUBLE_HOLD:
         if (bracket_info->is_shifted) register_code(KC_LEFT_SHIFT);
+        register_code(bracket_info->kc_open);
         register_code(bracket_info->kc_close);
+
+        unregister_code(bracket_info->kc_open);
+        unregister_code(bracket_info->kc_close);
+
+        if (bracket_info->is_shifted) unregister_code(KC_LEFT_SHIFT);
         break;
     }
 }
@@ -88,25 +97,27 @@ void my_td_brackets_finished(tap_dance_state_t *state, void *user_data)
 void my_td_brackets_reset(tap_dance_state_t *state, void *user_data)
 {
   bracket_info_t *bracket_info = (bracket_info_t *)user_data;
+
   switch (xtap_state.state)
     {
       case SINGLE_TAP:
-        if (bracket_info->is_shifted)
-          {
-            unregister_code(KC_LEFT_SHIFT);
-          }
         unregister_code(bracket_info->kc_open);
         break;
+      case DOUBLE_TAP:
+        unregister_code(bracket_info->kc_close);
+        break;
       case SINGLE_HOLD:
+        unregister_code(bracket_info->kc_open);
+        unregister_code(bracket_info->kc_close);
         unregister_code(KC_LEFT);
         break;
-      case DOUBLE_TAP:
-        if (bracket_info->is_shifted)
-          {
-            unregister_code(KC_LEFT_SHIFT);
-          }
+      case DOUBLE_HOLD:
+        unregister_code(bracket_info->kc_open);
         unregister_code(bracket_info->kc_close);
         break;
     }
+
+  if (bracket_info->is_shifted) unregister_code(KC_LEFT_SHIFT);
+
   xtap_state.state = 0;
 }
