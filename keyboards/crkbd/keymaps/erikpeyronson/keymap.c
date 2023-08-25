@@ -93,6 +93,10 @@ void housekeeping_task_user(void)
     }
 }
 
-void oneshot_layer_changed_user(uint8_t mods) {
-  my_oled_osl_changed(mods);
+void oneshot_layer_changed_user(uint8_t mods) { my_oled_osl_changed(mods); }
+
+void oneshot_locked_mods_changed_user(uint8_t mods) { my_oled_locked_mods_changed(mods); }
+
+void oneshot_mods_changed_user(uint8_t mods) {
+  my_oled_oneshot_mods_changed(mods);
 }
