@@ -180,7 +180,7 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "KC_P0"
+      "KC_0"
     ],
     [
       "ANY(TD(TD_BASE_TILDE))",
@@ -263,12 +263,12 @@
       "KC_END",
       "KC_NO",
       "KC_NO",
-      "OSL(LAYER_ETC)",
+      "ANY(MY_LT(LAYER_ETC,KC_BSPC))",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "OSL(LAYER_ETC)"
+      "ANY(MY_LT(LAYER_ETC,KC_SPC))"
     ],
     [
       "QK_BOOT",
