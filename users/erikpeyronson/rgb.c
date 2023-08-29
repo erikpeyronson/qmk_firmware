@@ -86,6 +86,85 @@ void each_key(void)
     }
 }
 
+typedef enum
+{
+  MOD_NOT_ENGAGED = 0,
+  MOD_ONESHOT,
+  MOD_LOCKED,
+  MOD_ENGAGED,
+} mod_state_t;
+
+static mod_state_t is_mod_set(uint16_t kc)
+{
+  uint8_t mod_state = get_mods();
+  if (mod_state & MOD_BIT(kc))
+    {
+      return MOD_ENGAGED;
+    }
+
+  mod_state = get_oneshot_mods();
+
+  if (mod_state & MOD_BIT(kc))
+    {
+      return MOD_ONESHOT;
+    }
+  return MOD_NOT_ENGAGED;
+}
+
+void my_rgb_light_mod_if_set(uint8_t kc, uint8_t led_config)
+{
+
+  switch (is_mod_set(kc))
+    {
+      case MOD_ONESHOT:
+        {
+          rgb_color_t rgb = get_color(LAYER_OSM);
+          rgb_matrix_set_color(led_config, rgb.red, rgb.green, rgb.blue);
+          break;
+        }
+      case MOD_ENGAGED:
+        {
+          rgb_color_t rgb = {RGB_WHITE};
+          rgb_matrix_set_color(led_config, rgb.red, rgb.green, rgb.blue);
+          break;
+        }
+      default:
+
+        return;
+    }
+}
+
+void my_rgb_mods(void)
+{
+
+  uint8_t row, kc_ofset;
+
+  // Set the home row number based on keyboard half and
+  // an offset added to the kc to get the right hand version of the modifier.
+  if (is_keyboard_master())
+    {
+      row    = 1;
+      kc_ofset = 0;
+    }
+  else
+    {
+      row    = 5;
+      kc_ofset = 4;
+    }
+
+  uint8_t left_control = g_led_config.matrix_co[row][4];
+  my_rgb_light_mod_if_set(KC_LEFT_CTRL + kc_ofset, left_control);
+
+  uint8_t left_shift = g_led_config.matrix_co[row][3];
+  my_rgb_light_mod_if_set(KC_LEFT_SHIFT + kc_ofset, left_shift);
+
+  uint8_t left_alt   = g_led_config.matrix_co[row][2];
+  my_rgb_light_mod_if_set(KC_LEFT_ALT+ kc_ofset, left_alt);
+
+  uint8_t left_gui   = g_led_config.matrix_co[row][0];
+  my_rgb_light_mod_if_set(KC_LEFT_GUI + kc_ofset, left_gui);
+}
+
 void thumbs_only(void)
 {
   uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
@@ -172,6 +251,7 @@ void thumbs_solid(void)
 
 bool rgb_matrix_indicators_user()
 {
+  my_rgb_mods();
   switch (current_mode)
     {
       case EACH_KEY:
