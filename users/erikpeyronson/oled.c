@@ -14,9 +14,7 @@
 #ifdef MY_OLED_RENDER_KEYMAP_ENABLED
 static char keymap_chars[6][3][5];
 #endif
-static uint8_t osl_state        = 0;
-static uint8_t locked_mod_state = 0;
-static uint8_t osm_state        = 0;
+
 void           my_oled_init(const uint16_t keymaps[6][MATRIX_ROWS][MATRIX_COLS])
 {
 #ifdef MY_OLED_RENDER_KEYMAP_ENABLED
@@ -138,7 +136,7 @@ static void my_oled_render_layers(void)
   oled_write_P(PSTR("-----"), false);
   oled_write_P(PSTR("LAYER"), false);
   oled_write_P(PSTR("-----"), false);
-
+  uint8_t osl_state = get_oneshot_layer();
   for (layer_t layer = LAYER_BASE; layer < LAYER_END; ++layer)
     {
       const bool should_oneshot = (layer != LAYER_BASE) && (osl_state == layer);
@@ -161,11 +159,12 @@ static void my_oled_render_locks(void)
   oled_write_P(PSTR("MODS "), false);
   oled_write_P(PSTR("-----"), false);
   uint8_t mod_state = get_mods();
+  uint8_t osm_state  = get_oneshot_mods();
   // clang-format off
-  my_oled_render_selection( "Ctrl", locked_mod_state & MOD_MASK_CTRL  || (mod_state & MOD_BIT(KC_LEFT_CTRL)),  osm_state & MOD_MASK_CTRL);
-  my_oled_render_selection( "Shif", locked_mod_state & MOD_MASK_SHIFT || (mod_state & MOD_BIT(KC_LEFT_SHIFT)), osm_state & MOD_MASK_SHIFT);
-  my_oled_render_selection( "Alt",  locked_mod_state & MOD_MASK_ALT   || (mod_state & MOD_BIT(KC_LEFT_ALT)),   osm_state & MOD_MASK_ALT);
-  my_oled_render_selection( "Win",  locked_mod_state & MOD_MASK_GUI   || (mod_state & MOD_BIT(KC_LEFT_GUI)),   osm_state & MOD_MASK_GUI);
+  my_oled_render_selection( "Ctrl", (mod_state & MOD_BIT(KC_LEFT_CTRL)),  osm_state & MOD_MASK_CTRL);
+  my_oled_render_selection( "Shif", (mod_state & MOD_BIT(KC_LEFT_SHIFT)), osm_state & MOD_MASK_SHIFT);
+  my_oled_render_selection( "Alt",  (mod_state & MOD_BIT(KC_LEFT_ALT)),   osm_state & MOD_MASK_ALT);
+  my_oled_render_selection( "Win",  (mod_state & MOD_BIT(KC_LEFT_GUI)),   osm_state & MOD_MASK_GUI);
   // clang-format on
 }
 
@@ -234,10 +233,9 @@ bool oled_task_user(void)
   return false;
 }
 
-void my_oled_osl_changed(uint8_t osl) { osl_state = osl; }
+// void my_oled_osl_changed(uint8_t osl) { osl_state = osl; }
 
-void my_oled_locked_mods_changed(uint8_t mods) { locked_mod_state = mods; }
+// void my_oled_locked_mods_changed(uint8_t mods) { locked_mod_state = mods; }
 
-void my_oled_oneshot_mods_changed(uint8_t mods) { osm_state = mods; }
 
 #endif

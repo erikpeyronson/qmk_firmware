@@ -53,7 +53,7 @@ rgb_color_t get_color(uint16_t layer)
 
   return layer_colors[layer];
 }
-
+#ifdef MY_RGB_EACH_KEY_ENABLED
 void each_key(void)
 {
   uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
@@ -85,6 +85,8 @@ void each_key(void)
         }
     }
 }
+
+#endif
 
 typedef enum
 {
@@ -143,12 +145,12 @@ void my_rgb_mods(void)
   // an offset added to the kc to get the right hand version of the modifier.
   if (is_keyboard_master())
     {
-      row    = 1;
+      row      = 1;
       kc_ofset = 0;
     }
   else
     {
-      row    = 5;
+      row      = 5;
       kc_ofset = 4;
     }
 
@@ -158,10 +160,11 @@ void my_rgb_mods(void)
   uint8_t left_shift = g_led_config.matrix_co[row][3];
   my_rgb_light_mod_if_set(KC_LEFT_SHIFT + kc_ofset, left_shift);
 
-  uint8_t left_alt   = g_led_config.matrix_co[row][2];
-  my_rgb_light_mod_if_set(KC_LEFT_ALT+ kc_ofset, left_alt);
+  // Due to using international layout, left alt is used on both sides
+  uint8_t left_alt = g_led_config.matrix_co[row][2];
+  my_rgb_light_mod_if_set(KC_LEFT_ALT, left_alt);
 
-  uint8_t left_gui   = g_led_config.matrix_co[row][0];
+  uint8_t left_gui = g_led_config.matrix_co[row][0];
   my_rgb_light_mod_if_set(KC_LEFT_GUI + kc_ofset, left_gui);
 }
 
@@ -199,7 +202,7 @@ void thumbs_only(void)
           uint8_t  target_layer = QK_LAYER_TAP_GET_LAYER(kc);
           rgb                   = get_color(target_layer);
         }
-      // We need to be patriots and use the colors of the swedish flag when in
+      // We shold be proper patriots and use the colors of the swedish flag when in
       // the swe layer
       else if (current_layer == LAYER_SWE && is_keyboard_left())
         {
@@ -254,9 +257,11 @@ bool rgb_matrix_indicators_user()
   my_rgb_mods();
   switch (current_mode)
     {
+#ifdef MY_RGB_EACH_KEY_ENABLED
       case EACH_KEY:
         each_key();
         break;
+#endif
       case THUMBS_HINT:
         thumbs_only();
         break;

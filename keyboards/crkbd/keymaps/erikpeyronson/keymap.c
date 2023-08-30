@@ -65,12 +65,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
   return true;
 }
 
-layer_state_t layer_state_set_user(layer_state_t state)
-{
-  // my_set_keymap_chars(keymaps);
-  return state;
-}
-
 static bool is_idle = false;
 
 void housekeeping_task_user(void)
@@ -91,12 +85,4 @@ void housekeeping_task_user(void)
       my_rgb_set_mode(old_rgb_mode);
       is_idle = false;
     }
-}
-
-void oneshot_layer_changed_user(uint8_t mods) { my_oled_osl_changed(mods); }
-
-void oneshot_locked_mods_changed_user(uint8_t mods) { my_oled_locked_mods_changed(mods); }
-
-void oneshot_mods_changed_user(uint8_t mods) {
-  my_oled_oneshot_mods_changed(mods);
 }
