@@ -160,7 +160,6 @@ void my_rgb_mods(void)
   uint8_t left_shift = g_led_config.matrix_co[row][3];
   my_rgb_light_mod_if_set(KC_LEFT_SHIFT + kc_ofset, left_shift);
 
-  // Due to using international layout, left alt is used on both sides
   uint8_t left_alt = g_led_config.matrix_co[row][2];
   my_rgb_light_mod_if_set(KC_LEFT_ALT, left_alt);
 
