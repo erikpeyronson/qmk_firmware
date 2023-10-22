@@ -8,7 +8,6 @@
 
 #include "oled.h"
 #include "erikpeyronson.h"
-#include "tap_dance.h"
 
 #include "keymap_out.h"
 
@@ -18,10 +17,6 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_SWE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_MINUS, LAYER_SWE),
     [TD_BASE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_NO, LAYER_BASE),
     [TD_BASE_TILDE] = ACTION_TAP_DANCE_LAYER_MOVE(KC_TILD, LAYER_BASE),
-    [TD_CURLY_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_CURLY_BRACKETS]),
-    [TD_SQUARE_BRACKETS] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_SQUARE_BRACKETS]),
-    [TD_PARENTESES] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_PARENTESES]),
-    [TD_LTGT] = MY_ACTION_TAP_DANCE_FN_ADVANCED(NULL, my_td_brackets_finished, my_td_brackets_reset, (void *)&brackets[TD_LTGT]),
 };
 // clang-format on
 
@@ -60,6 +55,52 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 
   uprintf("Character reprentation: %c \n\n", keycode_to_char(keycode, NULL));
 #endif
+
+  switch (keycode) { // This will do most of the grunt work with the keycodes.
+    case ONENOTE_HAND:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "y");
+      }
+      break;
+    case ONENOTE_AUTO_SHAPE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "h");
+      }
+      break;
+    case ONENOTE_FULL_SCREEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "f");
+      }
+      break;
+    case ONENOTE_MATH:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "00a");
+      }
+      break;
+    case ONENOTE_TEXT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "00x");
+      }
+      break;
+
+    case ONENOTE_NEXT_PEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "g" SS_TAP(X_RIGHT) SS_TAP(X_ENTER));
+      }
+      break;
+
+    case ONENOTE_PREVIOUS_PEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "g" SS_TAP(X_LEFT) SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_PEN_PROPERTIES:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "gg");
+      }
+      break;
+  }
+
 
   if (!my_rgb_process_record(keycode, record)) return false;
   return true;

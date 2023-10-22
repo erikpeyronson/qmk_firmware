@@ -1,11 +1,14 @@
 #ifdef OLED_ENABLE
 #include "quantum.h"
-#include "logo.h"
 #include "oled_driver.h"
 #include "print.h"
 
 #include "common.h"
 #include "erikpeyronson.h"
+
+#ifdef MY_RENDER_LOGO_ENABLED
+#include "logo.h"
+#endif
 
 #include <ctype.h>
 
@@ -192,11 +195,16 @@ static uint8_t brigtness = 0;
 
 static bool screen_saver_on = false;
 
+#ifdef MY_RENDER_LOGO_ENABLED
 static void my_oled_render_logo(void)
 {
   oled_write_raw_P(raw_logo, sizeof(raw_logo));
   oled_scroll_left();
 }
+
+#else
+static void my_oled_render_logo(void) {}
+#endif
 
 void my_oled_screensaver(bool turn_on)
 {

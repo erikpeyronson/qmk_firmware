@@ -23,6 +23,20 @@
 #undef KC_PSTE
 #define KC_PSTE LCTL(KC_X)
 
+enum custom_keycodes {
+  ONENOTE_HAND = SAFE_RANGE,
+  ONENOTE_AUTO_SHAPE,
+  ONENOTE_FULL_SCREEN,
+
+  ONENOTE_MATH,
+  ONENOTE_TEXT,
+
+  ONENOTE_NEXT_PEN,
+  ONENOTE_PREVIOUS_PEN,
+
+  ONENOTE_PEN_PROPERTIES,
+};
+
 // Custom helper functions used by rgb/oled. Can be overridden in keymap
 char        keycode_to_char(uint16_t keycode, keyrecord_t *record);
 const char *layer_to_string(uint8_t layer);

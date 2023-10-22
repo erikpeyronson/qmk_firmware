@@ -1,42 +1,42 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    // Unofficially, QMK uses spaces for indentation
-    "editor.insertSpaces": true,
-    // Configure glob patterns for excluding files and folders.
-    "files.exclude": {
-      "**/.build": true,
-      "**/*.bin": true,
-      "**/*.hex": true,
-      "**/*.uf2": true,
-      "test/**/*": true
-    },
-    "files.associations": {
-        "*.h": "c",
-        "*.c": "c",
-        "*.inc": "c",
-        "*.cpp": "cpp",
-        "*.hpp": "cpp",
-        "xstddef": "c",
-        "type_traits": "c",
-        "utility": "c",
-        "ranges": "c"
-    },
-    "[markdown]": {
-        "editor.trimAutoWhitespace": false,
-        "files.trimTrailingWhitespace": false
-    },
-    "python.formatting.provider": "yapf",
-    "[json]": {
-        "editor.formatOnSave": false
-    },
-
-    "C_Cpp.intelliSenseEngine": "disabled",
-    "clangd.arguments": [
-      "--header-insertion=never",
-      "--compile-commands-dir=${workspaceFolder}"
-      // "-query-driver=/usr/bin/avr-g++"
-    ],
-    "clangd.path": "/home/erik/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/16.0.2/clangd_16.0.2/bin/clangd",
-    "clang-format.assumeFilename": "",
-    "clang-format.fallbackStyle": "Google",
+  // Unofficially, QMK uses spaces for indentation
+  "editor.insertSpaces": true,
+  // Configure glob patterns for excluding files and folders.
+  "files.exclude": {
+    "**/.build": true,
+    "**/*.bin": true,
+    "**/*.hex": true,
+    "**/*.uf2": true,
+    "test/**/*": true
+  },
+  "files.associations": {
+    "*.h": "c",
+    "*.c": "c",
+    "*.inc": "c",
+    "*.cpp": "cpp",
+    "*.hpp": "cpp",
+    "xstddef": "c",
+    "type_traits": "c",
+    "utility": "c",
+    "ranges": "c"
+  },
+  "[markdown]": {
+    "editor.trimAutoWhitespace": false,
+    "files.trimTrailingWhitespace": false
+  },
+  "python.formatting.provider": "yapf",
+  "[json]": {
+    "editor.formatOnSave": false
+  },
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "clangd.arguments": [
+    "--header-insertion=never",
+    "--compile-commands-dir=${workspaceFolder}"
+    // "-query-driver=/usr/bin/avr-g++"
+  ],
+  "clangd.path": "/home/erik/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/16.0.2/clangd_16.0.2/bin/clangd",
+  "clang-format.assumeFilename": "",
+  "clang-format.fallbackStyle": "Google",
+  "editor.formatOnSave": false,
 }
