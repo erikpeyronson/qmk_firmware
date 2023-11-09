@@ -35,6 +35,12 @@ enum custom_keycodes {
   ONENOTE_PREVIOUS_PEN,
 
   ONENOTE_PEN_PROPERTIES,
+  ONENOTE_ZOOM_200,
+  ONENOTE_ZOOM_175,
+  ONENOTE_ZOOM_150,
+  ONENOTE_ZOOM_125,
+  ONENOTE_ZOOM_100,
+  ONENOTE_ZOOM_75,
 };
 
 // Custom helper functions used by rgb/oled. Can be overridden in keymap

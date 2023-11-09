@@ -42,6 +42,7 @@ void keyboard_post_init_user(void)
   my_oled_init(keymaps);
 }
 
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
   // If console is enabled, it will print the matrix position and status of each
@@ -97,6 +98,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case ONENOTE_PEN_PROPERTIES:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT("d") "gg");
+      }
+      break;
+
+    case ONENOTE_ZOOM_200:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "q200" SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_ZOOM_175:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "q175" SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_ZOOM_150:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "q150" SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_ZOOM_125:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "q125" SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_ZOOM_100:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "q100" SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_ZOOM_75:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "q75" SS_TAP(X_ENTER));
       }
       break;
   }
