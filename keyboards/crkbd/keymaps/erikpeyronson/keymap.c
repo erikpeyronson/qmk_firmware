@@ -63,74 +63,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         SEND_STRING(SS_LALT("d") "y");
       }
       break;
-    case ONENOTE_AUTO_SHAPE:
+    case ONENOTE_ARROW:
       if (record->event.pressed) {
-        SEND_STRING(SS_LALT("d") "h");
+        SEND_STRING(SS_LALT("d") "t");
+      }
+      break;
+
+     case ONENOTE_NEXT_PEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "g" SS_TAP(X_RIGHT) SS_TAP(X_ENTER));
+      }
+      break;
+    case ONENOTE_PREVIOUS_PEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("d") "g" SS_TAP(X_LEFT) SS_TAP(X_ENTER));
+      }
+      break;
+
+    case ONENOTE_ZOOM_IN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "e");
+      }
+      break;
+    case ONENOTE_ZOOM_OUT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT("w") "w");
       }
       break;
     case ONENOTE_FULL_SCREEN:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT("d") "f");
       }
-      break;
-    case ONENOTE_MATH:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("d") "00a");
-      }
-      break;
-    case ONENOTE_TEXT:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("d") "00x");
-      }
-      break;
-
-    case ONENOTE_NEXT_PEN:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("d") "g" SS_TAP(X_RIGHT) SS_TAP(X_ENTER));
-      }
-      break;
-
-    case ONENOTE_PREVIOUS_PEN:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("d") "g" SS_TAP(X_LEFT) SS_TAP(X_ENTER));
-      }
-      break;
-    case ONENOTE_PEN_PROPERTIES:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("d") "gg");
-      }
-      break;
-
-    case ONENOTE_ZOOM_200:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("w") "q200" SS_TAP(X_ENTER));
-      }
-      break;
-    case ONENOTE_ZOOM_175:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("w") "q175" SS_TAP(X_ENTER));
-      }
-      break;
-    case ONENOTE_ZOOM_150:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("w") "q150" SS_TAP(X_ENTER));
-      }
-      break;
-    case ONENOTE_ZOOM_125:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("w") "q125" SS_TAP(X_ENTER));
-      }
-      break;
-    case ONENOTE_ZOOM_100:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("w") "q100" SS_TAP(X_ENTER));
-      }
-      break;
-    case ONENOTE_ZOOM_75:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LALT("w") "q75" SS_TAP(X_ENTER));
-      }
-      break;
   }
 
 
