@@ -4,8 +4,13 @@
 
 typedef enum _RgbMode
 {
+
+#ifdef MY_RGB_EACH_KEY_ENABLED
   EACH_KEY = 0,
+#endif
+#ifdef MY_RGB_THUMBS_HINT_ENABLED
   THUMBS_HINT,
+#endif
   THUMBS_SOLID,
   OFF
 } RgbMode;
