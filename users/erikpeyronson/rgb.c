@@ -167,6 +167,7 @@ void my_rgb_mods(void)
   my_rgb_light_mod_if_set(KC_LEFT_GUI + kc_ofset, left_gui);
 }
 
+#ifdef MY_RGB_THUMBS_HINT_ENABLED
 void thumbs_only(void)
 {
   uint16_t current_layer = get_highest_layer(layer_state | default_layer_state);
@@ -215,6 +216,7 @@ void thumbs_only(void)
       rgb_matrix_set_color(led_index, rgb.red, rgb.green, rgb.blue);
     }
 }
+#endif
 
 void thumbs_solid(void)
 {
@@ -261,9 +263,11 @@ bool rgb_matrix_indicators_user()
         each_key();
         break;
 #endif
+#ifdef MY_RGB_THUMBS_HINT_ENABLED
       case THUMBS_HINT:
         thumbs_only();
         break;
+#endif
       case THUMBS_SOLID:
         thumbs_solid();
         break;

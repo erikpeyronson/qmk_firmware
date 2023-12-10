@@ -191,20 +191,16 @@ void my_oled_render_info(void)
 #endif
 }
 
-static uint8_t brigtness = 0;
-
-static bool screen_saver_on = false;
 
 #ifdef MY_RENDER_LOGO_ENABLED
+static uint8_t brigtness = 0;
+static bool screen_saver_on = false;
+
 static void my_oled_render_logo(void)
 {
   oled_write_raw_P(raw_logo, sizeof(raw_logo));
   oled_scroll_left();
 }
-
-#else
-static void my_oled_render_logo(void) {}
-#endif
 
 void my_oled_screensaver(bool turn_on)
 {
@@ -227,6 +223,7 @@ void my_oled_screensaver(bool turn_on)
     }
 }
 
+
 bool oled_task_user(void)
 {
   if (!screen_saver_on)
@@ -240,10 +237,15 @@ bool oled_task_user(void)
 
   return false;
 }
+#else
 
-// void my_oled_osl_changed(uint8_t osl) { osl_state = osl; }
+void my_oled_screensaver(bool turn_on) {}
 
-// void my_oled_locked_mods_changed(uint8_t mods) { locked_mod_state = mods; }
-
+bool oled_task_user(void)
+{
+      my_oled_render_info();
+      return false;
+}
+#endif
 
 #endif
