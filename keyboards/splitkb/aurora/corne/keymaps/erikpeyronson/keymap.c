@@ -45,17 +45,13 @@ void keyboard_post_init_user(void)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
-  // If console is enabled, it will print the matrix position and status of each
-  // key pressed
-#ifdef CONSOLE_ENABLE
+// #ifdef CONSOLE_ENABLE
+  // uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: "
+  //         "%u, count: %u\n\n",
+  //     keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time,
+  //     record->tap.interrupted, record->tap.count);
 
-  uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: "
-          "%u, count: %u\n\n",
-      keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time,
-      record->tap.interrupted, record->tap.count);
-
-  uprintf("Character reprentation: %c \n\n", keycode_to_char(keycode, NULL));
-#endif
+// #endif
 
   switch (keycode) { // This will do most of the grunt work with the keycodes.
     case ONENOTE_HAND:
@@ -108,17 +104,31 @@ void housekeeping_task_user(void)
   static RgbMode old_rgb_mode;
   uint32_t       idle_time = last_input_activity_elapsed();
 
-  if (!is_idle && idle_time > MY_OLED_SCREENSAVER_TIMEOUT)
-    {
+  if (!is_idle && idle_time > MY_OLED_SCREENSAVER_TIMEOUT) {
       old_rgb_mode = my_rgb_get_mode();
       my_rgb_set_mode(OFF);
       my_oled_screensaver(true);
       is_idle = true;
     }
-  else if (is_idle && idle_time < MY_OLED_SCREENSAVER_TIMEOUT)
-    {
+  else if (is_idle && idle_time < MY_OLED_SCREENSAVER_TIMEOUT) {
       my_oled_screensaver(false);
       my_rgb_set_mode(old_rgb_mode);
       is_idle = false;
     }
+}
+
+bool my_encoder_scroll(bool clockwise) {
+        // scroll
+        if (clockwise) {
+            uprint("index 1 clockwise\n");
+            tap_code(KC_WH_D);
+        } else {
+            uprint("index 1 counter clockwise\n");
+            tap_code(KC_WH_U);
+        }
+    return false;
+}
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+  return my_encoder_scroll(clockwise);
 }
