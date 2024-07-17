@@ -1,5 +1,8 @@
 #ifdef OLED_ENABLE
 #include "quantum.h"
+
+#include "string.h"
+
 #include "oled_driver.h"
 #include "print.h"
 
