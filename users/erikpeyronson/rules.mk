@@ -10,4 +10,8 @@ endif
 # 	SRC += $(USER_PATH)/tap_dance.c
 # endif
 
+ifeq ($(strip $(ENCODER_ENABLE)), yes)
+	SRC += $(USER_PATH)/my_encoder.c
+endif
+
 SRC += erikpeyronson.c

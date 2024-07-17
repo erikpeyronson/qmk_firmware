@@ -7,6 +7,7 @@
 #include "oled.h"
 #include "quantum.h"
 #include "rgb.h"
+#include "my_encoder.h"
 
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
@@ -89,6 +90,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 static bool is_idle = false;
 
+// void my_encoder_clear_state() {
+
+// }
+
 void housekeeping_task_user(void) {
   static RgbMode old_rgb_mode;
   uint32_t idle_time = last_input_activity_elapsed();
@@ -103,20 +108,43 @@ void housekeeping_task_user(void) {
     my_rgb_set_mode(old_rgb_mode);
     is_idle = false;
   }
+  // // clear encoder state such as modifiers being pressed
+  // if (idle_time > MY_ENCODER_MODIFIER_TIMEOUT) {
+  //   my_encoder_clear_state();
+  // }
 }
 
-bool my_encoder_scroll(bool clockwise) {
-  // scroll
-  if (clockwise) {
-    uprint("index 1 clockwise\n");
-    tap_code(KC_WH_D);
-  } else {
-    uprint("index 1 counter clockwise\n");
-    tap_code(KC_WH_U);
-  }
-  return false;
-}
+// bool my_encoder_scroll(bool clockwise) {
+//   clockwise ? tap_code(KC_WH_D) : tap_code(KC_WH_U);
+//   return false;
+// }
+
+// bool my_encoder_space(bool clockwise) {
+//   clockwise ? tap_code(KC_SPACE) : tap_code(KC_BACKSPACE);
+//   return false;
+// }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-  return my_encoder_scroll(clockwise);
+  uint8_t current_layer = get_highest_layer(layer_state);
+  switch (current_layer) {
+    case LAYER_BASE:
+    case LAYER_SWE:
+      my_encoder_scroll(clockwise);
+      break;
+    case LAYER_OSM:
+      break;
+    case LAYER_NUM:
+      my_encoder_space(clockwise);
+      break;
+    case LAYER_SYM:
+      break;
+    case LAYER_NAV:
+      break;
+    case LAYER_ETC:
+      break;
+    case LAYER_END:
+      break;
+  }
+
+  return false;
 }

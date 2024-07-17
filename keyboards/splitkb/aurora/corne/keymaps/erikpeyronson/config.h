@@ -140,3 +140,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SPLIT_MODS_ENABLE
 #undef ENCODER_RESOLUTION
 #define ENCODER_RESOLUTION 2
+
+#define MY_ENCODER_MODIFIER_TIMEOUT 5000
