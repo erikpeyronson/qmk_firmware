@@ -7,7 +7,53 @@
 #include "oled.h"
 #include "quantum.h"
 #include "rgb.h"
-#include "my_encoder.h"
+
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [LAYER_BASE] = {{QK_REPEAT_KEY, QK_ALT_REPEAT_KEY},
+                    {QK_REPEAT_KEY, QK_ALT_REPEAT_KEY}},
+    [LAYER_SWE] = {{QK_REPEAT_KEY, QK_ALT_REPEAT_KEY},
+                   {QK_REPEAT_KEY, QK_ALT_REPEAT_KEY}},
+    [LAYER_OSM] = {{KC_WH_D, KC_WH_U}, {KC_WH_D, KC_WH_U}},
+    [LAYER_NUM] = {{MY_ALT_TAB_NAV, MY_ALT_TAB_NAV_REVERSE},
+                   {MY_ALT_TAB_NAV, MY_ALT_TAB_NAV_REVERSE}},
+    [LAYER_SYM] = {{MY_CTRL_TAB_NAV, MY_CTRL_TAB_NAV_REVERSE},
+                   {MY_CTRL_TAB_NAV, MY_CTRL_TAB_NAV_REVERSE}},
+    [LAYER_NAV] = {{KC_WH_D, KC_WH_U}, {KC_WH_D, KC_WH_U}},
+    [LAYER_ETC] = {{KC_NO, KC_NO}, {KC_NO, KC_NO}}};
+
+#endif
+
+static bool ctrl_enabled = false;
+static bool alt_enabled = false;
+
+void start_ctrl_timer(void) {
+  if (!ctrl_enabled) {
+    register_code(KC_LCTL);
+    ctrl_enabled = true;
+  }
+}
+
+void stop_ctrl_timer(void) {
+  if (ctrl_enabled) {
+    unregister_code(KC_LCTL);
+    ctrl_enabled = false;
+  }
+}
+
+void start_alt_timer(void) {
+  if (!alt_enabled) {
+    register_code(KC_LALT);
+    alt_enabled = true;
+  }
+}
+
+void stop_alt_timer(void) {
+  if (alt_enabled) {
+    unregister_code(KC_LALT);
+    alt_enabled = false;
+  }
+}
 
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
@@ -26,7 +72,7 @@ const char *layer_strings[] = {
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
-  debug_enable = false;
+  debug_enable = true;
   debug_matrix = false;
   debug_keyboard = false;
   debug_mouse = false;
@@ -36,16 +82,18 @@ void keyboard_post_init_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // #ifdef CONSOLE_ENABLE
-  // uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: "
-  //         "%u, count: %u\n\n",
-  //     keycode, record->event.key.col, record->event.key.row,
-  //     record->event.pressed, record->event.time, record->tap.interrupted,
-  //     record->tap.count);
+#ifdef CONSOLE_ENABLE
+  uprintf(
+      "KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: "
+      "%u, count: %u\n\n",
+      keycode, record->event.key.col, record->event.key.row,
+      record->event.pressed, record->event.time, record->tap.interrupted,
+      record->tap.count);
 
-  // #endif
+#endif
 
-  switch (keycode) {  // This will do most of the grunt work with the keycodes.
+  switch (keycode) {
+    // ONENOTE macros
     case ONENOTE_HAND:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT("d") "y");
@@ -67,7 +115,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LALT("d") "g" SS_TAP(X_LEFT) SS_TAP(X_ENTER));
       }
       break;
-
     case ONENOTE_ZOOM_IN:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT("w") "e");
@@ -82,17 +129,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         SEND_STRING(SS_LALT("d") "f");
       }
+      break;
+
+      // Custom navigation
+
+    case MY_CTRL_TAB_NAV:
+      if (record->event.pressed) {
+        start_ctrl_timer();
+        tap_code(KC_TAB);
+      }
+      return false;
+    case MY_CTRL_TAB_NAV_REVERSE:
+      if (record->event.pressed) {
+        uprintf("control tab reverse\n");
+        start_ctrl_timer();
+        tap_code16(S(KC_TAB));
+      }
+      return false;
+    case MY_ALT_TAB_NAV:
+      if (record->event.pressed) {
+        start_alt_timer();
+        tap_code(KC_TAB);
+      }
+      return false;
+    case MY_ALT_TAB_NAV_REVERSE:
+      if (record->event.pressed) {
+        start_alt_timer();
+        tap_code16(S(KC_TAB));
+      }
+      return false;
   }
+  stop_ctrl_timer();
+  stop_alt_timer();
 
   if (!my_rgb_process_record(keycode, record)) return false;
   return true;
 }
 
 static bool is_idle = false;
-
-// void my_encoder_clear_state() {
-
-// }
 
 void housekeeping_task_user(void) {
   static RgbMode old_rgb_mode;
@@ -108,43 +182,13 @@ void housekeeping_task_user(void) {
     my_rgb_set_mode(old_rgb_mode);
     is_idle = false;
   }
-  // // clear encoder state such as modifiers being pressed
-  // if (idle_time > MY_ENCODER_MODIFIER_TIMEOUT) {
-  //   my_encoder_clear_state();
-  // }
+
+  if (idle_time > MY_NAVIGATION_MOD_TIMEOUT) {
+    stop_ctrl_timer();
+    stop_alt_timer();
+  }
 }
 
-// bool my_encoder_scroll(bool clockwise) {
-//   clockwise ? tap_code(KC_WH_D) : tap_code(KC_WH_U);
-//   return false;
-// }
-
-// bool my_encoder_space(bool clockwise) {
-//   clockwise ? tap_code(KC_SPACE) : tap_code(KC_BACKSPACE);
-//   return false;
-// }
-
 bool encoder_update_user(uint8_t index, bool clockwise) {
-  uint8_t current_layer = get_highest_layer(layer_state);
-  switch (current_layer) {
-    case LAYER_BASE:
-    case LAYER_SWE:
-      my_encoder_scroll(clockwise);
-      break;
-    case LAYER_OSM:
-      break;
-    case LAYER_NUM:
-      my_encoder_space(clockwise);
-      break;
-    case LAYER_SYM:
-      break;
-    case LAYER_NAV:
-      break;
-    case LAYER_ETC:
-      break;
-    case LAYER_END:
-      break;
-  }
-
   return false;
 }

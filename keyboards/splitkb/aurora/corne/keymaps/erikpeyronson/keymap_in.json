@@ -52,7 +52,7 @@
     ],
     [
       "ANY(MY_LT(LAYER_BASE,KC_TAB))",
-      "KC_TRNS",
+      "QK_REPEAT_KEY",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",

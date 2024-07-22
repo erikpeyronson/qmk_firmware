@@ -20,6 +20,14 @@ enum
   MY_CYCLE_RGB_MODE = MY_RGB_KEYCODE_OFFSET
 };
 
+enum
+{
+  MY_CTRL_TAB_NAV = GENERAL_KEYCODE_OFFSET,
+  MY_CTRL_TAB_NAV_REVERSE,
+  MY_ALT_TAB_NAV,
+  MY_ALT_TAB_NAV_REVERSE
+};
+
 // Tap Dance definitions
 enum
 {

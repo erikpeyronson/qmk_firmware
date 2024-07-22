@@ -125,9 +125,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OLED_SCREENSAVER_BRIGHTNESS 1
 #undef MY_OLED_RENDER_KEYMAP_ENABLE
 
-
-#define MY_RGB_KEYCODE_OFFSET SAFE_RANGE
-#define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
 #undef MY_RGB_EACH_KEY_ENABLED
 #undef MY_RGB_THUMBS_HINT_ENABLED
 #undef MY_RENDER_LOGO_ENABLED
@@ -141,4 +138,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef ENCODER_RESOLUTION
 #define ENCODER_RESOLUTION 2
 
-#define MY_ENCODER_MODIFIER_TIMEOUT 5000
+#define MY_NAVIGATION_MOD_TIMEOUT 3000
