@@ -10,6 +10,7 @@ DEST=$REPO_ROOT/keyboards/$KBD/keymaps/$KEYMAP/keymap_in.json
 # mv $SOURCE $DEST
 # echo "Moved json keymap from $SOURCE to $DEST"
 
+
 # echo -n "Setting qmk defaults -kb $KBD/$VERSION -km $KEYMAP ..."
 # qmk config user.keymap=$KEYMAP
 # echo " done!"

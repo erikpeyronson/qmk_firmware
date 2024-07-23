@@ -127,7 +127,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #define MY_RGB_KEYCODE_OFFSET SAFE_RANGE
-#define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
+// #define TAP_DANCE_KEYCODE_OFFSET SAFE_RANGE + 0xFF
 #undef MY_RGB_EACH_KEY_ENABLED
 #undef MY_RGB_THUMBS_HINT_ENABLED
 #undef MY_RENDER_LOGO_ENABLED
