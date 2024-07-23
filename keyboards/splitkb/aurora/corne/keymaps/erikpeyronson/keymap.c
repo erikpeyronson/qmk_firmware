@@ -83,12 +83,12 @@ void keyboard_post_init_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef CONSOLE_ENABLE
-  uprintf(
-      "KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: "
-      "%u, count: %u\n\n",
-      keycode, record->event.key.col, record->event.key.row,
-      record->event.pressed, record->event.time, record->tap.interrupted,
-      record->tap.count);
+  // uprintf(
+  //     "KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: "
+  //     "%u, count: %u\n\n",
+  //     keycode, record->event.key.col, record->event.key.row,
+  //     record->event.pressed, record->event.time, record->tap.interrupted,
+  //     record->tap.count);
 
 #endif
 
@@ -189,6 +189,28 @@ void housekeeping_task_user(void) {
   }
 }
 
-bool encoder_update_user(uint8_t index, bool clockwise) {
-  return false;
+bool encoder_update_user(uint8_t index, bool clockwise) { return false; }
+
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+  // clang-format off
+  if ((mods & MOD_MASK_CTRL)) {  // is ctrl held?
+    switch (keycode) {
+      case KC_Y:    return C(KC_Z);  // Ctrl + Y reverses to Ctrl + Z.
+      case KC_Z:    return C(KC_Y);  // Ctrl + Z reverses to Ctrl + Y.
+
+      case KC_PMNS: return C(KC_PPLS);  // Zoom out using numpad
+      case KC_PPLS: return C(KC_MINS);  // zoom in using numpad
+      case KC_MINS: return C(KC_PPLS);  // regular zoom out
+      case KC_EQL: return C(KC_MINS); // If zoom in using equal kc zoom out
+
+      case KC_R:    return KC_U; // redo undo vim
+    }
+  } else if (mods == 0) { // no modifiers held
+    switch (keycode) {
+      case KC_U:    return C(KC_R); // undo redo vim
+    }
+  }
+  // clang-format on
+
+  return KC_TRNS;  // Defer to default definitions.
 }
