@@ -1,4 +1,4 @@
-// Copyright 2023 QMK
+// Copyright 2025 QMK
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // NOTE: This keymap is for debugging purposes to have firmware to test the matrix when building the keyboard. If you intend to build this keyboard
@@ -31,9 +31,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
   return true;
 }
+
 #ifdef OLED_ENABLE
+// This function prints which half the keyboard considers itself to be.
+// Useful for debugging if the handedness pin and display is correctly set up.
 bool oled_task_user(void) {
-    // Host Keyboard Layer Status
 if (is_keyboard_left()) {
     oled_write_P(PSTR("left"), false);
 }
@@ -43,3 +45,9 @@ else{
     return false;
 }
 #endif
+
+// #if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+[0] = {{KC_UP, KC_DOWN},
+       {KC_RIGHT, KC_LEFT}}};
+// #endif

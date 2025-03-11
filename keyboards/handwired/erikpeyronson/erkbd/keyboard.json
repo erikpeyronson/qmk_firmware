@@ -7,6 +7,18 @@
         "pid": "0x1234",
         "device_version": "1.0.0"
     },
+    "features": {
+        "console": true,
+        "extrakey": true,
+        "encoder": true,
+        "encoder_map": true,
+        "bootmagic": true,
+        "oled_enable": true
+    },
+    "encoder": {
+        "enabled": true,
+        "rotary": [{"pin_a": "GP7", "pin_b": "GP8"}]
+    },
     "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
     "matrix_pins": {
@@ -33,7 +45,13 @@
         },
         "bootmagic": {
             "matrix": [4, 5]
+        },
+        "encoder": {
+            "right": {
+            "rotary": [{"pin_a": "GP7", "pin_b": "GP8"}]
         }
+    }
+
     },
     "layouts": {
         "LAYOUT_split_3x6_5": {
