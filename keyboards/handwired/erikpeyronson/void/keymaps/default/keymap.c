@@ -25,3 +25,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_NO,   KC_NO,   KC_LGUI, KC_BSPC, KC_SPC,           KC_SPC,  KC_ENT,  KC_RALT, KC_NO,   KC_NO
     )
 };
+
+// #if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+[0] = {{KC_KB_VOLUME_DOWN, KC_KB_VOLUME_UP},
+       {QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP}}};
+// #endif

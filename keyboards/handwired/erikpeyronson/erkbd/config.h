@@ -1,3 +1,5 @@
+// Copyright 2025 Erik Peyronson @erikpeyronson
+// SPDX-License-Identifier: GPL-3.0-or-later
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 500U
 

@@ -13,7 +13,6 @@
         "console": true,
         "extrakey": true,
         "encoder": true,
-        "encoder_map": true,
         "bootmagic": true,
         "oled_enable": true
     },
