@@ -1,7 +1,9 @@
 // Copyright 2023 QMK
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-// NOTE: This keymap is for debugging purposes only. It is not intended to be used.
+// NOTE: This keymap is for debugging purposes to have firmware to test the matrix when building the keyboard. If you intend to build this keyboard
+// you should create your own keymap.
+
 
 #include QMK_KEYBOARD_H
 #include "quantum.h"
@@ -12,21 +14,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
         KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-                          KC_NO, KC_NO,     KC_LGUI, KC_BSPC, KC_SPC,           KC_SPC,  KC_ENT,  KC_RALT, KC_NO, KC_NO
+                        KC_LBRC, KC_RBRC, KC_LGUI, KC_BSPC, KC_SPC,           KC_SPC,  KC_ENT,  KC_RALT, KC_LPRN, KC_RPRN
     )
 };
-
-#ifdef OLED_ENABLE
-
-
-bool oled_task_user(void) {
-
-  oled_write_raw_P(font, sizeof(font));
-
-
-    return false;
-}
-#endif
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
@@ -41,3 +31,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
   return true;
 }
+#ifdef OLED_ENABLE
+bool oled_task_user(void) {
+    // Host Keyboard Layer Status
+if (is_keyboard_left()) {
+    oled_write_P(PSTR("left"), false);
+}
+else{
+    oled_write_P(PSTR("right"), false);
+}
+    return false;
+}
+#endif
