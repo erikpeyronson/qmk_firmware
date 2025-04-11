@@ -2,8 +2,9 @@
     "manufacturer": "Erik Peyronson",
     "keyboard_name": "ermbkbd",
     "maintainer": "erikpeyronson",
-    "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
+    "bootloader": "rp2040",
+    "processor": "RP2040",
     "features": {
         "bootmagic": true,
         "command": false,
@@ -13,13 +14,13 @@
         "nkro": true
     },
     "matrix_pins": {
-        "cols": ["C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2"],
-        "rows": ["D1", "D1", "D1", "D1"]
+        "cols": ["GP2", "GP3", "GP4", "GP5", "GP6", "GP7",      "GP14", "GP15", "GP16",   "GP21","GP23","GP20", "GP22", "GP26", "GP27"],
+        "rows": ["GP8", "GP9", "GP12", "GP13"]
     },
     "url": "",
     "usb": {
         "device_version": "1.0.0",
-        "pid": "0x0000",
+        "pid": "0x1234",
         "vid": "0xFEED"
     },
     "layouts": {
