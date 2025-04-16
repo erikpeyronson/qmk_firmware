@@ -12,12 +12,13 @@
         "console": false,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true
+        "nkro": true,
+        "encoder": true
     },
 
     "encoder": {
         "rotary": [
-            {"pin_a": "GP10", "pin_b": "G0"},
+            {"pin_a": "GP0", "pin_b": "GP10"},
             {"pin_a": "GP29", "pin_b": "GP28"}
         ]
     },
