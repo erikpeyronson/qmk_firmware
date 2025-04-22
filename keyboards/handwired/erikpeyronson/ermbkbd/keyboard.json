@@ -15,10 +15,12 @@
         "nkro": true,
         "encoder": true
     },
-
+    "bootmagic": {
+      "matrix": [0, 0]
+    },
     "encoder": {
         "rotary": [
-            {"pin_a": "GP0", "pin_b": "GP10"},
+            {"pin_a": "GP10", "pin_b": "GP0"},
             {"pin_a": "GP29", "pin_b": "GP28"}
         ]
     },
